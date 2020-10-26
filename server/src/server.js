@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require('cors')
 let multer = require('multer');
-// let upload = multer();
+let upload = multer();
 
 const connectDb = require("./config/connectDb");
 const router = require("./routers/router");

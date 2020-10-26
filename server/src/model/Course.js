@@ -27,7 +27,7 @@ const CourseScheama = new Schema({
       ref: 'user'
     }
   ],
-  schemesterName: {
+  schemester: {
     type: String,
     required: true
   }
