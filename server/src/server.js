@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require('cors')
 let multer = require('multer');
-let upload = multer();
+let upload = multer({ dest: 'src/uploads/'});
 
 const connectDb = require("./config/connectDb");
 const router = require("./routers/router");
@@ -20,7 +20,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 // for parsing multipart/form-data
-app.use(upload.array()); 
 app.use("/api", router);
 
 app.get('/', (_req, res) => {
@@ -28,5 +27,9 @@ app.get('/', (_req, res) => {
 		message: 'hello'
 	})
 })
+
+	
+
+
 
 app.listen(port, () => console.log(`this app running on port ${port}`));

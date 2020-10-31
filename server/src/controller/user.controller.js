@@ -2,7 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../model/User');
-
+var formidable = require("formidable");
+var {getVideoDuration} = require ("get-video-duration");
+var fileSystem = require ("fs");
 const createUser = async(req, res) => {
   const { email, password, role } = req.body;
 
@@ -96,11 +98,46 @@ const login = async(req, res) => {
     })
   }
 }
+// function up-video
+// namvh
+ function upLoadFile (req, res){
+  console.log("asdasdsadsad");
+ /* var formData = new formidable.IncomingForm();
+  formData.maxFileSize = 1000*1024*1024;
+  formData.parse(req,function(error,fields,files){
+    /*var title = files.title;
+    var description = file.description;
+    var tags = files.tags;
+    var category = file.category;
+    var oldPathThumbnail = files.thumbnail.path;
 
+    var oldpath = files.filetoupload.path;
+    var newpath = 'D:\Project\video-catalog' + files.filetoupload.name;
+    fs.rename(oldpath, newpath, function (err) {
+      if (err) throw err;
+      res.write('File uploaded and moved!');
+      res.end();
+    });
+  })*/
+  const form = new formidable.IncomingForm(); 
+  form.parse(req, function(err, fields, files){ 
+
+      var oldPath = files.profilePic.path; 
+      var newPath = path.join(__dirname, 'uploads') 
+              + '/'+files.profilePic.name 
+      var rawData = fs.readFileSync(oldPath) 
+    
+      fs.writeFile(newPath, rawData, function(err){ 
+          if(err) console.log(err) 
+          return res.send("Successfully uploaded") 
+      }) 
+}) 
+}
 const checkToken = () => {
   
 }
 module.exports = {
   createUser,
-  login
+  login,
+  upLoadFile
 }

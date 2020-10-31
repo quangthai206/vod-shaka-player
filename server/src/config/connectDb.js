@@ -3,7 +3,8 @@ const bluebird = require("bluebird");
 
 let connectDb = () => {
   mongoose.Promise = bluebird;
-	let URI = `${process.env.DB_CONNECTION}://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+  let URI = `${process.env.DB_CONNECTION}://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+  console.log(URI);
 	console.log('connect db')
   return mongoose.connect(URI, {
     useNewUrlParser: true,
