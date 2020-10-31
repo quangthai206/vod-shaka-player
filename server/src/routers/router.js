@@ -13,4 +13,6 @@ router.get('/token', auth, userController.checkToken)
 router.get('/test', auth, isLecture, videoController.createFile)
 
 
+router.get('/add-student', auth, isLecture, userController.addStudentToCourse);
+router.get('/delete-student', auth, isLecture, userController.deleteStudentInCourse);
 module.exports = router;
