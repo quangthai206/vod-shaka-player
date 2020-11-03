@@ -97,10 +97,14 @@ const login = async(req, res) => {
   }
 }
 
-const checkToken = () => {
-  
+const checkToken = (req, res) => {
+  return res.status(200).json({
+    status: true,
+    message: "Token hợp lệ"
+  })
 }
 module.exports = {
   createUser,
-  login
+  login,
+  checkToken
 }
