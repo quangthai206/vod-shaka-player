@@ -7,7 +7,7 @@ module.exports = function (req, res, next) {
   // Check if not token
   if (!token) {
     return res.status(401).json({
-      msg: "Token không tồn tại"
+      msg: "Token không tồn tại",
     });
   }
   // Verify token
@@ -15,7 +15,7 @@ module.exports = function (req, res, next) {
     jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
       if (error) {
         return res.status(401).json({
-          msg: "Token không hợp lệ"
+          msg: "Token không hợp lệ",
         });
       } else {
         req.user = decoded;
@@ -26,7 +26,7 @@ module.exports = function (req, res, next) {
     console.log(err);
     console.error("something wrong with auth middleware");
     res.status(500).json({
-      msg: "Server Error"
+      msg: "Server Error",
     });
   }
 };
