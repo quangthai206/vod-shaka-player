@@ -2,13 +2,16 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const SchemesterSchema = new Schema({
-  name: {
-    type: String,
-    required: true
+const SchemesterSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
   },
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model("schemester", SchemesterSchema );
+module.exports = mongoose.model("schemester", SchemesterSchema);

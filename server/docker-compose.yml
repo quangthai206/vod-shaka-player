@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   node:
@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    depends_on: 
+    depends_on:
       - mongo
     ports:
       - ${APP_PORT}:${APP_PORT}
