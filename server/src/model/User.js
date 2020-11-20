@@ -16,6 +16,12 @@ const UserSchema = new Schema(
       type: String,
       default: "student",
     },
+    courses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "course",
+      },
+    ],
   },
   {
     timestamps: true,

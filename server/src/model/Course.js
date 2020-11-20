@@ -16,26 +16,33 @@ const CourseScheama = new Schema(
       type: String,
       required: true,
     },
-    videos: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "video",
-      },
-    ],
     lecturer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
-    students: [
+    chapters: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        title: {
+          type: String,
+          required: true,
+        },
+        lessons: [
+          {
+            title: {
+              type: String,
+              required: true,
+            },
+            description: {
+              type: String,
+            },
+            video: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "video",
+            },
+          },
+        ],
       },
     ],
-    schemester: {
-      type: String,
-      required: true,
-    },
   },
   {
     timestamps: true,

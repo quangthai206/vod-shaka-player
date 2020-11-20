@@ -8,6 +8,7 @@ router.post("/user", userController.createUser);
 router.post("/login", userController.login);
 router.post("/video/create", videoController.upLoadVideo);
 router.post("/course/create", courseController.createCourse);
+router.get("/courses", courseController.getCourses);
 router.get("/video/file", videoController.getFileManifest);
 
 router.post("/user", userController.createUser);
