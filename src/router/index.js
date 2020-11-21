@@ -6,36 +6,26 @@ import Courses from "../views/Student/Courses";
 import CourseDetails from "../views/Student/CourseDetails";
 import UploadVideo from "../views/UploadVideo";
 import ACourse from "../views/Lecturer/ACourse";
+import WatchStudent from "../views/Student/WatchStudent"
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue'),
-    // meta: {
-    //   requiresAuth: false
-    // }
-  },
-  {
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: {
-      guest: true
-    }
   },
   {
     path: '/courses',
     name: 'Courses',
     component: Courses,
-    // meta: {
-    //   requiresAuth: true
-    // },
+    meta: {
+      requiresAuth: true
+    },
   },
   {
-    path: '/courses/details',
+    path: '/courses/:id',
     name: 'CourseDetails',
     component: CourseDetails,
     // meta: {
@@ -55,8 +45,13 @@ const routes = [
     name: 'ACourse',
     component: ACourse,
     // meta: {
-    //   requiresAuth: false
+    //   requiresAuth: true
     // }
+  },
+  {
+    path: '/lessons/:id',
+    name: 'Watch',
+    component: WatchStudent
   },
 ]
 
@@ -65,34 +60,17 @@ const router = new VueRouter({
   routes
 })
 
-
-
 router.beforeEach((to, from, next) => {
-
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    const authStoreState = store.state.authStore;
-    authStoreState.authStatus
-      .then(() => {
-
-        if (authStoreState.isAuthenticated)
-          next();
-        else
-          next({
-            path: '/login',
-            query: { nextUrl: to.fullPath }
-          })
+    if (store.getters["auth/isAuthenticated"]) {
+      next();
+    } else {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
       })
-
-  }
-  /*else if(to.matched.some(record => record.meta.guest)) {
-    if(localStorage.getItem('jwt') == null){
-      next()
     }
-    else{
-      next({ name: 'Home'})
-    }
-  }*/
-  else {
+  } else {
     next()
   }
 })
