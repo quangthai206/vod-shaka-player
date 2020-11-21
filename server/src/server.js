@@ -11,7 +11,7 @@ const router = require("./routers/router");
 
 const port = process.env.PORT || 3300;
 
-app.use(express.static('public'))
+app.use(express.static("public"));
 app.use(cors());
 
 connectDb();

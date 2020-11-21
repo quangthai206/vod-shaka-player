@@ -3,15 +3,7 @@ const jwt = require("jsonwebtoken");
 const Course = require("../model/Course");
 const User = require("../model/User");
 const createCourse = async (req, res) => {
-  const {
-    name,
-    code,
-    description,
-    videos,
-    lecturer,
-    students,
-    schemester,
-  } = req.body;
+  const { name, code, description, videos, lecturer, students } = req.body;
 
   try {
     let course = await Course.findOne({ code });
@@ -31,7 +23,6 @@ const createCourse = async (req, res) => {
     newCourse.videos = videos;
     newCourse.lecturer = lecturer;
     newCourse.students = students;
-    newCourse.schemester = schemester;
 
     newCourse.save();
 
@@ -49,7 +40,8 @@ const createCourse = async (req, res) => {
 };
 
 const getCourses = async (req, res) => {
-  const user = await User.findOne({ _id: req._id}).populate('courses')
+  // const user = await User.findOne({ _id: req._id}).populate('courses')
+  const courses = await Course.find().populate("videos");
   // if(!user) {
   //   return res.status(401).json({
   //     status: false,
@@ -60,13 +52,11 @@ const getCourses = async (req, res) => {
   return res.status(200).json({
     status: true,
     message: "success",
-    data: user
-  })
-}
-
-
+    data: courses,
+  });
+};
 
 module.exports = {
   createCourse,
-  getCourses
+  getCourses,
 };
