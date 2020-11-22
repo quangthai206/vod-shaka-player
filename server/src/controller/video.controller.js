@@ -81,7 +81,24 @@ const getFileManifest = async (req, res) => {
   }
 };
 
+const createVideo = async (req, res) => {
+
+  const { name, fileLink } = req.body;
+  const video = Video({
+    name, 
+    fileLink
+  })
+
+  await video.save()
+
+  return res.status(201).json({
+    data: video
+  })
+
+}
+
 module.exports = {
   upLoadVideo,
   getFileManifest,
+  createVideo
 };
