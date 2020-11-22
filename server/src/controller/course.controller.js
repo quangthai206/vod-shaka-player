@@ -177,7 +177,14 @@ const updateLesson = async(req, res) => {
 
 const getCourses = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.user.id}).populate('courses')
+    const user = await User.findOne({ _id: req.user.id}).populate({ path : 'courses', populate: { path: 'teacher', select: 'name'}})
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "This user do not exist"
+      })
+    }
+
     return res.status(200).json({
       status: true,
       message: "success",
