@@ -6,17 +6,17 @@ const auth = require("../middleware/auth");
 
 router.post("/user", userController.createUser);
 router.post("/login", userController.login);
-router.post("/video/create", videoController.createVideo);
+router.post("/videos", videoController.createVideo);
 
-router.post("/course/create", courseController.createCourse);
-router.get("/courses",auth, courseController.getCourses);
-router.post("/chapter", courseController.createChapter);
-router.patch("/chapter", courseController.updateChapterTitle)
-router.post("/lesson", courseController.createLesson)
-router.patch("/lesson", courseController.updateLesson)
+router.post("/courses", courseController.createCourse);
+router.get("/courses", auth, courseController.getCourses);
+router.post("/chapters", courseController.createChapter);
+router.patch("/chapters", courseController.updateChapterTitle)
+router.post("/lessons", courseController.createLesson)
+router.patch("/lessons", courseController.updateLesson)
 router.get("/video/file", videoController.getFileManifest);
 
-router.post("/user", userController.createUser);
+router.post("/users", userController.createUser);
 router.post("/login", userController.login);
 router.get("/token", auth, userController.checkToken);
 

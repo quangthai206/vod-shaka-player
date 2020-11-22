@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 
 const createUser = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password, role, courseId } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -20,12 +20,16 @@ const createUser = async (req, res) => {
 
     user.email = email;
     user.password = await bcrypt.hash(password, salt);
-
+    user.courses = []
     if (role) {
       user.role = role;
     }
 
-    user.save();
+    if(courseId) {
+      user.courses.unshift(courseId)
+    }
+
+    await user.save();
 
     return res.status(201).json({
       status: true,

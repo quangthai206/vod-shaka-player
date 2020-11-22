@@ -1,5 +1,6 @@
 const Chapter = require("../model/Chapter");
 const Course = require("../model/Course");
+const User = require("../model/User")
 
 const createCourse = async (req, res) => {
   const { name, code, description } = req.body;
@@ -176,7 +177,7 @@ const updateLesson = async(req, res) => {
 
 const getCourses = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req._id}).populate('courses')
+    const user = await User.findOne({ _id: req.user.id}).populate('courses')
     return res.status(200).json({
       status: true,
       message: "success",
