@@ -2,7 +2,7 @@
   <div class="login-page">
     <div class="login-left">
       <a href="#">
-        <img src="../assets/logoUet.png" alt="" width="100px" />
+        <img src="../../assets/logoUet.png" alt="" width="100px" />
       </a>
 
       <div class="login-welcome">
@@ -88,8 +88,9 @@ export default {
           password: this.password,
         })
         .then(() => {
-          console.log(this.$route.query.redirect);
-          this.$router.push(this.$route.query.redirect || "/");
+          this.$router
+            .replace(this.$route.query.redirect || "/")
+            .catch(() => {});
         })
         .catch((err) => {
           this.error = err;
@@ -111,7 +112,7 @@ export default {
 .login-left {
   width: 40%;
   padding: 39px 45.5px;
-  background-image: url("../assets/bg-4.jpg");
+  background-image: url("../../assets/bg-4.jpg");
   background-position: center;
   background-size: cover;
   color: #ffffff;

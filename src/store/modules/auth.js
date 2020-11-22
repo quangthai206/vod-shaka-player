@@ -29,7 +29,10 @@ const actions = {
                     reject(err.response.data.message)
                 })
         })
-
+    },
+    logout({ commit }) {
+        localStorage.removeItem('token');
+        commit('setUser', null);
     }
 }
 

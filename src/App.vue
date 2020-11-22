@@ -1,11 +1,20 @@
 <template>
   <div id="app">
-    <router-view />
+    <div v-if="$store.getters['auth/isAuthenticated']">
+      <CoursesNavbar />
+    </div>
+    <router-view :key="$route.path" />
   </div>
 </template>
 
 <script>
-export default {};
+import CoursesNavbar from "./components/CoursesNavbar";
+
+export default {
+  components: {
+    CoursesNavbar,
+  },
+};
 </script>
 
 <style>

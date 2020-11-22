@@ -1,20 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from "../views/Login";
 import store from '../store/index';
-import Courses from "../views/Student/Courses";
-import CourseDetails from "../views/Student/CourseDetails";
+import Courses from "../views/common/Courses";
+import CourseDetail from "../views/common/CourseDetail";
 import UploadVideo from "../views/UploadVideo";
-import ACourse from "../views/Lecturer/ACourse";
-import WatchStudent from "../views/Student/WatchStudent"
+import WatchStudent from "../views/student/WatchStudent"
+import Home from "../views/common/Home"
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
+    path: '/',
+    name: 'Home',
+    component: Home,
   },
   {
     path: '/courses',
@@ -26,8 +25,8 @@ const routes = [
   },
   {
     path: '/courses/:id',
-    name: 'CourseDetails',
-    component: CourseDetails,
+    name: 'CourseDetail',
+    component: CourseDetail,
     // meta: {
     //   requiresAuth: true
     // },
@@ -36,14 +35,6 @@ const routes = [
     path: '/upload',
     name: 'UploadVideo',
     component: UploadVideo,
-    // meta: {
-    //   requiresAuth: true
-    // }
-  },
-  {
-    path: '/lecturer/course',
-    name: 'ACourse',
-    component: ACourse,
     // meta: {
     //   requiresAuth: true
     // }
@@ -66,7 +57,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       next({
-        path: '/login',
+        path: '/',
         query: { redirect: to.fullPath }
       })
     }

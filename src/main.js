@@ -25,7 +25,6 @@ const localToken = localStorage.getItem('token');
 // If token exists in localStorage, validate token with API
 // Otherwise, just init Vue app
 if (localToken) {
-  console.log('token get');
   axios.get(
     "http://localhost:3300/api/token",
     {

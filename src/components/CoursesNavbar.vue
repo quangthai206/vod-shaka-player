@@ -4,16 +4,16 @@
     <nav class="navbar navbar-inverse navbar-fixed-top courses-top-nav">
       <div class="container-courses">
         <div class="navbar-header">
-          <a class="navbar-brand courses-logo" href="#">
+          <router-link to="/" class="navbar-brand courses-logo">
             <img
               src="https://vueschool.io/img/logo/vueschool_logo_multicolor_negative.svg"
               alt=""
               width="150px"
             />
-          </a>
+          </router-link>
         </div>
         <ul class="nav navbar-nav courses-menu">
-          <li><a href="#">Courses</a></li>
+          <router-link to="/courses" tag="li"><a>Courses</a></router-link>
           <li><a href="#">Plans</a></li>
           <li><a href="#">Contacts</a></li>
         </ul>
@@ -26,10 +26,8 @@
               ><span class="glyphicon glyphicon-user"></span> Profile</a
             >
           </li>
-          <li>
-            <a href="#"
-              ><span class="glyphicon glyphicon-log-out"></span> Logout</a
-            >
+          <li @click="logout">
+            <a><span class="glyphicon glyphicon-log-out"></span> Logout</a>
           </li>
         </ul>
       </div>
@@ -40,6 +38,13 @@
 <script>
 export default {
   name: "CoursesNavbar",
+  methods: {
+    logout() {
+      this.$store.dispatch("auth/logout").then(() => {
+        this.$router.push("/").catch(() => {});
+      });
+    },
+  },
 };
 </script>
 
@@ -60,5 +65,9 @@ export default {
   border-radius: 0;
   background-color: #1d185e;
   font-size: 16px;
+}
+
+a {
+  cursor: pointer;
 }
 </style>
