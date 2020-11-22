@@ -9,11 +9,11 @@ router.post("/login", userController.login);
 router.post("/video/create", videoController.createVideo);
 
 router.post("/course/create", courseController.createCourse);
+router.get("/courses",auth, courseController.getCourses);
 router.post("/chapter", courseController.createChapter);
 router.patch("/chapter", courseController.updateChapterTitle)
 router.post("/lesson", courseController.createLesson)
 router.patch("/lesson", courseController.updateLesson)
-router.get("/courses", courseController.getCourses);
 router.get("/video/file", videoController.getFileManifest);
 
 router.post("/user", userController.createUser);
