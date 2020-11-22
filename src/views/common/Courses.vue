@@ -73,20 +73,21 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
       role: this.$store.state.auth.user.role,
-      courses: [],
     };
   },
+  computed: {
+    courses() {
+      return this.$store.state.courses.courses;
+    },
+  },
   created() {
-    axios.get("http://localhost:3300/api/courses").then((res) => {
-      console.log(res.data.data);
-      this.courses = res.data.data;
-    });
+    if (this.courses.length === 0) {
+      this.$store.dispatch("courses/getAllCourse");
+    }
   },
   methods: {
     goToCourse(id) {
