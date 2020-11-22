@@ -20,6 +20,7 @@ const actions = {
             axios.post('http://localhost:3300/api/login', { email, password })
                 .then(res => {
                     const responseData = res.data;
+                    axios.defaults.headers.common['Authorization'] = responseData.data.token;
                     localStorage.setItem('token', responseData.data.token);
                     commit('setUser', responseData.data.user);
                     resolve();

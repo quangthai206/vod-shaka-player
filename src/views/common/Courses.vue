@@ -44,7 +44,12 @@
       </div>
     </div>
     <div class="courses-list">
-      <div class="course-item" v-on:click="navToDetails">
+      <div
+        class="course-item"
+        v-for="course in courses"
+        :key="course._id"
+        @click="goToCourse(course._id)"
+      >
         <div class="course-item-img">
           <div
             style="
@@ -53,74 +58,13 @@
           ></div>
         </div>
         <div class="course-item-desc">
-          <h3 class="course-title">Vue 3 Composition API</h3>
+          <h3 class="course-title">{{ course.name }}</h3>
           <br />
           <p class="course-subtitle">
-            Leverage the power of the new Composition API and build reusable
-            features (composables) for scalable Vue applications.
+            {{ course.description }}
           </p>
           <div v-if="role === 'student'" class="course-lecturers">
-            <span class="label label-default">TS. Vu Ngoc Sang</span>
-          </div>
-        </div>
-      </div>
-      <div class="course-item">
-        <div class="course-item-img">
-          <div
-            style="
-              background-image: url('https://vueschool.io/media/f007f6057444d9a7f567163391d2b366/vuejs-3-master-class-not-transparent.jpg');
-            "
-          ></div>
-        </div>
-        <div class="course-item-desc">
-          <h3 class="course-title">Vue 3 Composition API</h3>
-          <br />
-          <p class="course-subtitle">
-            Leverage the power of the new Composition API and build reusable
-            features.
-          </p>
-          <div class="course-lecturers">
-            <span class="label label-default">TS. Vu Ngoc Sang</span>
-          </div>
-        </div>
-      </div>
-      <div class="course-item">
-        <div class="course-item-img">
-          <div
-            style="
-              background-image: url('https://vueschool.io/media/13867ba07d6eacdf868c78a340784a52/scoped-slots-course-not-transparent.jpg');
-            "
-          ></div>
-        </div>
-        <div class="course-item-desc">
-          <h3 class="course-title">Vue 3 Composition API</h3>
-          <br />
-          <p class="course-subtitle">
-            Leverage the power of the new Composition API and build reusable
-            features (composables) for scalable Vue applications.
-          </p>
-          <div class="course-lecturers">
-            <span class="label label-default">TS. Vu Ngoc Sang</span>
-          </div>
-        </div>
-      </div>
-      <div class="course-item">
-        <div class="course-item-img">
-          <div
-            style="
-              background-image: url('https://vueschool.io/media/0e0ebe693c234f487c1eccc5cad3faaa/modern-javascript-es6-and-beyond.jpeg');
-            "
-          ></div>
-        </div>
-        <div class="course-item-desc">
-          <h3 class="course-title">Vue 3 Composition API</h3>
-          <br />
-          <p class="course-subtitle">
-            Leverage the power of the new Composition API and build reusable
-            features (composables) for scalable Vue applications.
-          </p>
-          <div class="course-lecturers">
-            <span class="label label-default">TS. Vu Ngoc Sang</span>
+            <span class="label label-default">{{ course.teacher.name }}</span>
           </div>
         </div>
       </div>
@@ -129,15 +73,24 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       role: this.$store.state.auth.user.role,
+      courses: [],
     };
   },
+  created() {
+    axios.get("http://localhost:3300/api/courses").then((res) => {
+      console.log(res.data.data);
+      this.courses = res.data.data;
+    });
+  },
   methods: {
-    navToDetails() {
-      this.$router.push("courses/details");
+    goToCourse(id) {
+      this.$router.push("courses/" + id);
     },
   },
 };

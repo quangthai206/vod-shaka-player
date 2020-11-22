@@ -33,6 +33,7 @@ if (localToken) {
       }
     })
     .then((res) => {
+      axios.defaults.headers.common['Authorization'] = localToken;
       store.commit('auth/setUser', res.data.user);
     })
     .catch((e) => {
