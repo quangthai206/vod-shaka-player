@@ -10,7 +10,7 @@ const SchemesterSchema = new Schema(
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const CourseScheama = new Schema(
+const CourseSchema = new Schema(
   {
     name: {
       type: String,
@@ -22,26 +22,9 @@ const CourseScheama = new Schema(
     },
     chapters: [
       {
-        title: {
-          type: String,
-          required: true,
-        },
-        lessons: [
-          {
-            title: {
-              type: String,
-              required: true,
-            },
-            description: {
-              type: String,
-            },
-            video: {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "video",
-            },
-          },
-        ],
-      },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'chapter'
+      }
     ],
   },
   {
@@ -49,4 +32,4 @@ const CourseScheama = new Schema(
   }
 );
 
-module.exports = mongoose.model("course", CourseScheama);
+module.exports = mongoose.model("course", CourseSchema);
