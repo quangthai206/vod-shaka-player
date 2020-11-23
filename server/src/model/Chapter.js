@@ -9,18 +9,9 @@ const ChapterSchema = new Schema({
   },
   lessons: [
     {
-      title: {
-        type: String,
-        required: true,
-      },
-      description: {
-        type: String,
-      },
-      video: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "video",
-      },
-    },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'lesson'
+    }
   ],
 });
 

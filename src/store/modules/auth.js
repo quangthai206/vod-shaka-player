@@ -34,6 +34,7 @@ const actions = {
     logout({ commit }) {
         localStorage.removeItem('token');
         commit('setUser', null);
+        commit('courses/setCourses', [], { root: true });
     }
 }
 

@@ -10,6 +10,7 @@ router.post("/videos", videoController.createVideo);
 
 router.post("/courses", courseController.createCourse);
 router.get("/courses", auth, courseController.getCourses);
+router.get("/courses/:id", courseController.getCourseDetails);
 router.post("/chapters", courseController.createChapter);
 router.patch("/chapters", courseController.updateChapterTitle)
 router.post("/lessons", courseController.createLesson)

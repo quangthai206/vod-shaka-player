@@ -60,7 +60,10 @@
         <div class="course-item-desc">
           <h3 class="course-title">{{ course.name }}</h3>
           <br />
-          <p class="course-subtitle">
+          <p
+            class="course-subtitle"
+            :class="{ 'course-subtitle-teacher': role === 'teacher' }"
+          >
             {{ course.description }}
           </p>
           <div v-if="role === 'student'" class="course-lecturers">
@@ -100,7 +103,7 @@ export default {
 <style scoped>
 .courses-body {
   background-color: #edf3ff;
-  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
 }
 
 .courses-body .courses-header {
@@ -201,6 +204,10 @@ export default {
 .course-item-desc .course-subtitle {
   color: #766b93;
   margin-bottom: 5em;
+}
+
+.course-item-desc .course-subtitle-teacher {
+  margin-bottom: 2em;
 }
 
 .course-item-desc .course-lecturers span {

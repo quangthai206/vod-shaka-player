@@ -1,5 +1,6 @@
 const Chapter = require("../model/Chapter");
 const Course = require("../model/Course");
+const Lesson = require("../model/Lesson");
 const User = require("../model/User")
 
 const createCourse = async (req, res) => {
@@ -14,7 +15,7 @@ const createCourse = async (req, res) => {
       });
     }
 
-    newCourse = new Course();
+    const newCourse = new Course();
     newCourse.name = name;
     newCourse.code = code;
     newCourse.description = description;
@@ -39,24 +40,24 @@ const createChapter = async (req, res) => {
   const { courseId, title } = req.body;
 
   try {
-    const course = await Course.findOne({ _id: courseId});
+    const course = await Course.findOne({ _id: courseId });
 
     if (!course) {
       return res.status(404).json({
         status: false,
         message: "This course do not exist"
-      })    
+      })
     }
-  
-    
+
+
     const chapter = new Chapter();
-  
+
     chapter.title = title;
     await chapter.save()
-    course.chapters.unshift(chapter._id);
-  
+    course.chapters.push(chapter._id);
+
     await course.save()
-  
+
     return res.status(201).json({
       status: true,
       message: "chapter created",
@@ -71,26 +72,26 @@ const createChapter = async (req, res) => {
   }
 }
 
-const updateChapterTitle = async(req, res) => {
+const updateChapterTitle = async (req, res) => {
   const { chapterId, title } = req.body;
 
   try {
     const chapter = await Chapter.findOne({ _id: chapterId })
 
-  if (!chapter) {
-    return res.status(404).json({
-      status: false,
-      message: "This chapter do not exist"
-    })
-  }
+    if (!chapter) {
+      return res.status(404).json({
+        status: false,
+        message: "This chapter do not exist"
+      })
+    }
 
-  chapter.title = title;
-  await chapter.save();
-  return res.status(201).json({
-    status: true,
-    message: "chapter title updated",
-    data: chapter
-  })
+    chapter.title = title;
+    await chapter.save();
+    return res.status(201).json({
+      status: true,
+      message: "chapter title updated",
+      data: chapter
+    })
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -100,34 +101,26 @@ const updateChapterTitle = async(req, res) => {
   }
 }
 
-const createLesson = async(req, res) => {
-  const { chapterId, title, description, videoId } = req.body;
+const createLesson = async (req, res) => {
+  const { chapterId, title, description } = req.body;
 
   try {
     const chapter = await Chapter.findOne({ _id: chapterId })
 
-  if (!chapter) {
-    return res.status(404).json({
-      status: false,
-      message: "This chapter do not exist"
+    const newLesson = new Lesson();
+    newLesson.title = title;
+    newLesson.description = description;
+
+    await newLesson.save();
+
+    chapter.lessons.push(newLesson._id);
+    await chapter.save();
+
+    res.json({
+      status: true,
+      message: "create lesson successfully",
+      data: chapter
     })
-  }
-
-  chapter.lessons = [
-    {
-      title,
-      description,
-      video: videoId
-    }
-  ]
-
-  await chapter.save()
-
-  return res.status(201).json({
-    status: true,
-    message: "lesson created",
-    data: chapter
-  })
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -137,7 +130,7 @@ const createLesson = async(req, res) => {
   }
 }
 
-const updateLesson = async(req, res) => {
+const updateLesson = async (req, res) => {
   const { chapterId, lessonId, title, description } = req.body;
 
   try {
@@ -151,7 +144,7 @@ const updateLesson = async(req, res) => {
     }
 
     for (let item of chapter.lessons) {
-      if( item._id.toString() === lessonId) {
+      if (item._id.toString() === lessonId) {
         item.title = title
         item.description = description
         break;
@@ -177,7 +170,7 @@ const updateLesson = async(req, res) => {
 
 const getCourses = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.user.id}).populate({ path : 'courses', populate: { path: 'teacher', select: 'name'}})
+    const user = await User.findOne({ _id: req.user.id }).populate({ path: 'courses', populate: { path: 'teacher', select: 'name' } })
     if (!user) {
       return res.status(404).json({
         status: false,
@@ -199,11 +192,37 @@ const getCourses = async (req, res) => {
   }
 };
 
+const getCourseDetails = async (req, res) => {
+  try {
+    const course = await Course.findOne({ _id: req.params.id }).populate({ path: "chapters", populate: { path: "lessons" } });
+
+    if (!course) {
+      return res.status(404).json({
+        status: false,
+        message: "This course do not exist"
+      })
+    }
+
+    return res.json({
+      status: true,
+      message: "success",
+      data: course,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: false,
+      message: err.message,
+    });
+  }
+}
+
 module.exports = {
   createCourse,
   getCourses,
   createChapter,
   updateChapterTitle,
   createLesson,
-  updateLesson
+  updateLesson,
+  getCourseDetails
 };

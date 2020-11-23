@@ -40,81 +40,28 @@
     </div>
 
     <ul id="course-lessons">
-      <li class="lessons-chap">
+      <li
+        v-for="(chapter, index) in chapters"
+        :key="chapter._id"
+        class="lessons-chap"
+      >
         <div class="number-chap">
-          <div>1</div>
+          <div>{{ index + 1 }}</div>
         </div>
         <div class="info-chap">
           <div class="title-chap">
-            <h2>Introduction</h2>
-            <p>2 lessons</p>
+            <h2>{{ chapter.title }}</h2>
+            <p>{{ chapter.lessons.length }} lessons</p>
           </div>
           <div class="content-chap">
             <ul>
-              <li>
-                <router-link to="/lessons/sdfe32r3">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <p><b>Introduction to Single File Components</b></p>
-                </router-link>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <p><b>Introduction to Vue-CLI 3</b></p>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </li>
-      <li class="lessons-chap">
-        <div class="number-chap">
-          <div>2</div>
-        </div>
-        <div class="info-chap">
-          <div class="title-chap">
-            <h2>Single File Components</h2>
-            <p>6 lessons</p>
-          </div>
-          <div class="content-chap">
-            <ul>
-              <li>
-                <a href="#">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <p><b>Create Your First Single File Component</b></p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <p><b>Import Single File Components</b></p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
+              <li v-for="lesson in chapter.lessons" :key="lesson._id">
+                <router-link :to="'/lessons/' + lesson._id">
                   <span class="glyphicon glyphicon-play"></span>
                   <p>
-                    <b>Using CSS Pre-Processors with Single File Components</b>
+                    <b>{{ lesson.title }}</b>
                   </p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <p><b>Scoped Styles</b></p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <p><b>Organizing Single File Components</b></p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="glyphicon glyphicon-play"></span>
-                  <p><b>Load Vue Components Asynchronously</b></p>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -127,6 +74,10 @@
 <script>
 export default {
   name: "CourseContentLeft",
+  props: ["chapters"],
+  created() {
+    console.log(this.chapters);
+  },
 };
 </script>
 
