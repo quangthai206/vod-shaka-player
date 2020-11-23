@@ -100,7 +100,7 @@ export default {
 <style scoped>
 .courses-body {
   background-color: #edf3ff;
-  height: 100%;
+  height: calc(100vh - 50px);
 }
 
 .courses-body .courses-header {
