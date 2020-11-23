@@ -13,6 +13,7 @@ router.get("/courses", auth, courseController.getCourses);
 router.get("/courses/:id", courseController.getCourseDetails);
 router.post("/chapters", courseController.createChapter);
 router.patch("/chapters", courseController.updateChapterTitle)
+router.get("/lessons/:id", courseController.getLessonDetails)
 router.post("/lessons", courseController.createLesson)
 router.patch("/lessons", courseController.updateLesson)
 router.get("/video/file", videoController.getFileManifest);

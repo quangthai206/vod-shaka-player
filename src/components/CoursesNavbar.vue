@@ -5,11 +5,7 @@
       <div class="container-courses">
         <div class="navbar-header">
           <router-link to="/" class="navbar-brand courses-logo">
-            <img
-              src="https://vueschool.io/img/logo/vueschool_logo_multicolor_negative.svg"
-              alt=""
-              width="150px"
-            />
+            <img src="../assets/method-draw-image_1.svg" alt="" width="150px" />
           </router-link>
         </div>
         <ul class="nav navbar-nav courses-menu">

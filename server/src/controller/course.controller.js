@@ -217,6 +217,31 @@ const getCourseDetails = async (req, res) => {
   }
 }
 
+const getLessonDetails = async (req, res) => {
+  try {
+    const lesson = await Lesson.findOne({ _id: req.params.id }).populate({ path: "chapter", select: { 'course': 1 }, populate: { path: "course", select: { 'name': 1 } } });
+
+    if (!lesson) {
+      return res.status(404).json({
+        status: false,
+        message: "This lesson do not exist"
+      })
+    }
+
+    return res.json({
+      status: true,
+      message: "success",
+      data: lesson,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: false,
+      message: err.message,
+    });
+  }
+}
+
 module.exports = {
   createCourse,
   getCourses,
@@ -224,5 +249,6 @@ module.exports = {
   updateChapterTitle,
   createLesson,
   updateLesson,
-  getCourseDetails
+  getCourseDetails,
+  getLessonDetails
 };

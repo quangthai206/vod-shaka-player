@@ -8,6 +8,10 @@ const VideoSchema = new Schema(
       type: String,
       required: true,
     },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
     fileLink: {
       type: String,
       required: true,

@@ -1,38 +1,18 @@
 <template>
-  <div>
-    <CoursesNavbar />
+  <div v-if="!isLoading">
     <div class="watch-container container-courses">
       <h2>
-        <a href="#"
-          ><i class="glyphicon glyphicon-arrow-left"></i> Programing
-          Fundamentals
-        </a>
+        <router-link :to="'/courses/' + lesson.chapter.course._id"
+          ><i class="glyphicon glyphicon-arrow-left"></i>
+          {{ lesson.chapter.course.name }}
+        </router-link>
       </h2>
       <ShakaPlayer />
       <div class="watch-content">
         <div class="description">
-          <h1>Introduction</h1>
+          <h1>{{ lesson.title }}</h1>
           <div class="text xl:text-lg">
-            <p>
-              Nuxt.js is a framework for creating Vue.js applications. Its goal
-              is to help Vue developers take advantage of top-notch
-              technologies, fast, easy and in an organized way.
-            </p>
-            <p>
-              In this lesson, we talk about some of the awesome features Nuxt.js
-              brings to the table:
-            </p>
-            <ul>
-              <li>SEO with Server Side Rendering (SSR)</li>
-              <li>Pre Rendering</li>
-              <li>Code Splitting</li>
-            </ul>
-            <p>
-              You <strong>do not need to know Nuxt.js</strong> to take this
-              course, but <strong>you should know Vue.js</strong>. Check out our
-              other <a href="https://vueschool.io/courses">courses</a> if you
-              want to learn Vue.js.
-            </p>
+            <p>{{ lesson.description }}</p>
           </div>
         </div>
         <div class="watch-aside">
@@ -206,11 +186,33 @@
 </template>
 
 <script>
-import CoursesNavbar from "../../components/CoursesNavbar";
+import axios from "axios";
 import ShakaPlayer from "../../components/ShakaPlayer";
 
 export default {
-  components: { CoursesNavbar, ShakaPlayer },
+  components: { ShakaPlayer },
+  data() {
+    return {
+      isLoading: false,
+      lesson: null,
+    };
+  },
+  created() {
+    this.isLoading = true;
+    const lessonId = this.$route.params.id;
+    axios
+      .get(`http://localhost:3300/api/lessons/${lessonId}`)
+      .then((res) => {
+        console.log(res.data.data);
+        this.lesson = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  },
 };
 </script>
 

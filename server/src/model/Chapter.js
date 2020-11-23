@@ -7,6 +7,10 @@ const ChapterSchema = new Schema({
     type: String,
     required: true,
   },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'course'
+  },
   lessons: [
     {
       type: mongoose.Schema.Types.ObjectId,

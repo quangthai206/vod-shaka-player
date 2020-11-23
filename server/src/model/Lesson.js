@@ -10,6 +10,10 @@ const LessonSchema = new Schema({
   description: {
     type: String,
   },
+  chapter: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "chapter",
+  },
   video: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "video",

@@ -29,7 +29,7 @@ export default {
   },
   mounted() {
     //Link to MPEG-DASH video
-    var manifestUri = "http://127.0.0.1:5500/media/test-manifest-full.mpd";
+    var manifestUri = "http://127.0.0.1:3300/test-manifest-full.mpd";
 
     //Getting reference to video and video container on DOM
     const video = this.$refs.videoComponent;

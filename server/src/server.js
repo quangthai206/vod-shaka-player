@@ -10,9 +10,8 @@ const connectDb = require("./config/connectDb");
 const router = require("./routers/router");
 
 const port = process.env.PORT || 3300;
-
-app.use(express.static("public"));
 app.use(cors());
+app.use(express.static(__dirname + '/public'));
 
 connectDb();
 // for parsing application/json
