@@ -7,6 +7,7 @@
       ref="videoComponent"
       id="video"
       style="width: 100%; height: 100%"
+      poster="https://i.vimeocdn.com/video/708740915.jpg?mw=1400&mh=788"
     ></video>
   </div>
 </template>
@@ -16,6 +17,11 @@ import "shaka-player/dist/controls.css";
 const shaka = require("shaka-player/dist/shaka-player.ui.js");
 
 export default {
+  data() {
+    return {
+      isManifestLoaded: false,
+    };
+  },
   methods: {
     onErrorEvent(event) {
       // Extract the shaka.util.Error object from the event.
@@ -37,7 +43,6 @@ export default {
 
     //Initialize shaka player
     var player = new shaka.Player(video);
-    console.log(player.getConfiguration());
 
     //Setting up shaka player UI
     const ui = new shaka.ui.Overlay(player, videoContainer, video);
@@ -46,36 +51,41 @@ export default {
     // Listen for error events.
     player.addEventListener("error", this.onErrorEvent);
 
-    console.log("button");
-    console.log(
-      document.querySelector(".shaka-small-play-button.material-icons-round")
-    );
     document
       .querySelector(".shaka-small-play-button.material-icons-round")
       .addEventListener(
         "click",
         () => {
-          console.log("clickkk");
-          player
-            .load(manifestUri)
-            .then(function () {
-              // This runs if the asynchronous load is successful.
-              console.log("The video has now been loaded!");
-              video.play();
-            })
-            .catch(this.onError); // onError is executed if the asynchronous load fails.
+          if (!this.isManifestLoaded) {
+            player
+              .load(manifestUri)
+              .then(() => {
+                this.isManifestLoaded = true;
+                console.log("The video has now been loaded!");
+                video.play();
+              })
+              .catch(this.onError); // onError is executed if the asynchronous load fails.
+          }
         },
         { once: true }
       );
-    // Try to load a manifest.
-    // This is an asynchronous process.
-    // player
-    //   .load(manifestUri)
-    //   .then(function () {
-    //     // This runs if the asynchronous load is successful.
-    //     console.log("The video has now been loaded!");
-    //   })
-    //   .catch(this.onError); // onError is executed if the asynchronous load fails.
+
+    document.querySelector(".shaka-scrim-container").addEventListener(
+      "click",
+      () => {
+        if (!this.isManifestLoaded) {
+          player
+            .load(manifestUri)
+            .then(() => {
+              this.isManifestLoaded = true;
+              console.log("The video has now been loaded!");
+              video.play();
+            })
+            .catch(this.onError);
+        }
+      },
+      { once: true }
+    );
   },
 };
 </script>
