@@ -37,6 +37,7 @@ export default {
 
     //Initialize shaka player
     var player = new shaka.Player(video);
+    console.log(player.getConfiguration());
 
     //Setting up shaka player UI
     const ui = new shaka.ui.Overlay(player, videoContainer, video);
@@ -45,15 +46,36 @@ export default {
     // Listen for error events.
     player.addEventListener("error", this.onErrorEvent);
 
+    console.log("button");
+    console.log(
+      document.querySelector(".shaka-small-play-button.material-icons-round")
+    );
+    document
+      .querySelector(".shaka-small-play-button.material-icons-round")
+      .addEventListener(
+        "click",
+        () => {
+          console.log("clickkk");
+          player
+            .load(manifestUri)
+            .then(function () {
+              // This runs if the asynchronous load is successful.
+              console.log("The video has now been loaded!");
+              video.play();
+            })
+            .catch(this.onError); // onError is executed if the asynchronous load fails.
+        },
+        { once: true }
+      );
     // Try to load a manifest.
     // This is an asynchronous process.
-    player
-      .load(manifestUri)
-      .then(function () {
-        // This runs if the asynchronous load is successful.
-        console.log("The video has now been loaded!");
-      })
-      .catch(this.onError); // onError is executed if the asynchronous load fails.
+    // player
+    //   .load(manifestUri)
+    //   .then(function () {
+    //     // This runs if the asynchronous load is successful.
+    //     console.log("The video has now been loaded!");
+    //   })
+    //   .catch(this.onError); // onError is executed if the asynchronous load fails.
   },
 };
 </script>
