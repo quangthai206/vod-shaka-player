@@ -39,77 +39,44 @@
       </ul>
     </div>
 
-    <button
-      type="button"
-      class="btn btn-primary btn-add-chap"
-      v-on:click="displayAddChapForm"
-    >
-      Add Chapter
-    </button>
-
-    <div class="panel panel-success add-wrapper" v-show="isAddingChap">
-      <div class="panel-heading">
-        <form class="form-inline add-form" v-on:submit="addAChap">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              id="title"
-              placeholder="Enter a title"
-              v-model="title"
-            />
-          </div>
-          <button type="submit" class="btn btn-default">Add</button>
-        </form>
-      </div>
-    </div>
-
     <ul id="course-lessons">
-      <CourseChapter
-        v-for="(chap, index) in chaps"
-        v-bind:key="chap.id"
-        v-bind:index="index"
-        v-bind:chap="chap"
-      />
+      <li
+        v-for="(chapter, index) in chapters"
+        :key="chapter._id"
+        class="lessons-chap"
+      >
+        <div class="number-chap">
+          <div>{{ index + 1 }}</div>
+        </div>
+        <div class="info-chap">
+          <div class="title-chap">
+            <h2>{{ chapter.title }}</h2>
+            <p>{{ chapter.lessons.length }} lessons</p>
+          </div>
+          <div class="content-chap">
+            <ul>
+              <li v-for="lesson in chapter.lessons" :key="lesson._id">
+                <a>
+                  <span class="glyphicon glyphicon-play"></span>
+                  <p>
+                    <b>{{ lesson.title }}</b>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
     </ul>
-
-    <LessonAddModal />
   </div>
 </template>
 
 <script>
-import CourseChapter from "./CourseChapter";
-import LessonAddModal from "./LessonAddModal";
 export default {
   name: "CourseContentLeft",
-  components: { LessonAddModal, CourseChapter },
-  data() {
-    return {
-      chaps: this.$store.state.teacherLesson.chaps,
-      isAddingChap: false,
-      title: "",
-    };
-  },
-
-  methods: {
-    displayAddChapForm() {
-      this.isAddingChap = !this.isAddingChap;
-    },
-
-    addAChap(e) {
-      e.preventDefault();
-
-      if (this.title != "") {
-        let newChap = {
-          id: this.chaps.length + 1,
-          title: this.title,
-          lessons: [],
-        };
-
-        this.$store.commit("addAChap", newChap);
-        this.title = "";
-      }
-    },
+  props: ["chapters"],
+  created() {
+    console.log(this.chapters);
   },
 };
 </script>
@@ -128,27 +95,71 @@ export default {
   margin-bottom: 50px;
 }
 
-.content-left #course-lessons {
+.content-left #course-lessons,
+.content-left #course-lessons ul {
   list-style-type: none;
 }
 
-.btn-add-chap {
-  margin-bottom: 40px;
-}
-
-.add-wrapper {
-  width: 50%;
-}
-
-.add-form {
+.lessons-chap {
   display: flex;
+  background-color: #ffffff;
+  padding: 20px 20px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
+    0 5px 15px 0 rgba(0, 0, 0, 0.08);
 }
 
-.add-form > div {
+.lessons-chap .number-chap {
+  margin-right: 20px;
+}
+
+.lessons-chap .number-chap > div {
+  width: 40px;
+  height: 40px;
+  border: solid 6px #d6f3ea;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-chap {
   flex-grow: 1;
 }
 
-.add-form > div > input {
-  width: 100%;
+.info-chap .title-chap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.info-chap .content-chap ul li {
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.info-chap .content-chap ul li:nth-child(odd) {
+  background-color: #f6f5f9;
+}
+
+.info-chap .content-chap li a {
+  display: flex;
+  align-items: center;
+}
+
+.info-chap .content-chap li > a > span {
+  color: #5cceac;
+  padding: 1px;
+  text-align: center;
+  border: solid 3px #bcebdd;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.info-chap .content-chap li > a > p {
+  font-size: 16px;
+  color: #766b93;
 }
 </style>

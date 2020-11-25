@@ -1,18 +1,46 @@
 <template>
-  <div>
-    <CourseIntro />
+  <div v-if="!isLoading">
+    <CourseIntro
+      :title="courseDetails.name"
+      :subtitle="courseDetails.description"
+    />
     <div class="course-content container-courses">
-      <CourseContentLeft />
+      <CourseContentLeft :chapters="courseDetails.chapters" />
     </div>
   </div>
 </template>
 
 <script>
-import CourseIntro from "../../components/teacher/CourseDetail/CourseIntro";
+import axios from "axios";
+import CourseIntro from "../../components/common/CourseIntro";
 import CourseContentLeft from "../../components/teacher/CourseDetail/CourseContentLeft";
 export default {
-  name: "ACourse",
-  components: { CourseContentLeft, CourseIntro },
+  name: "CourseDetails",
+  components: {
+    CourseContentLeft,
+    CourseIntro,
+  },
+  data() {
+    return {
+      isLoading: false,
+      courseDetails: null,
+    };
+  },
+  created() {
+    this.isLoading = true;
+    const courseId = this.$route.params.id;
+    axios
+      .get(`http://localhost:3300/api/courses/${courseId}`)
+      .then((res) => {
+        this.courseDetails = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  },
 };
 </script>
 

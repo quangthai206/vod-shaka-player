@@ -13,7 +13,7 @@
 
 <script>
 import axios from "axios";
-import CourseIntro from "../../components/student/CourseDetail/CourseIntro";
+import CourseIntro from "../../components/common/CourseIntro";
 import CourseContentLeft from "../../components/student/CourseDetail/CourseContentLeft";
 import CourseContentRight from "../../components/student/CourseDetail/CourseContentRight";
 export default {
