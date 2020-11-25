@@ -17,6 +17,7 @@ import "shaka-player/dist/controls.css";
 const shaka = require("shaka-player/dist/shaka-player.ui.js");
 
 export default {
+  props: ["manifest"],
   data() {
     return {
       isManifestLoaded: false,
@@ -35,7 +36,7 @@ export default {
   },
   mounted() {
     //Link to MPEG-DASH video
-    var manifestUri = "http://127.0.0.1:3300/title-test-4_1606304277824.mpd";
+    var manifestUri = this.manifest;
 
     //Getting reference to video and video container on DOM
     const video = this.$refs.videoComponent;

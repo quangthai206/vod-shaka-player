@@ -7,7 +7,7 @@
           {{ lesson.chapter.course.name }}
         </router-link>
       </h2>
-      <ShakaPlayer />
+      <ShakaPlayer :manifest="lesson.video.fileLink" />
       <div class="watch-content">
         <div class="description">
           <h1>{{ lesson.title }}</h1>

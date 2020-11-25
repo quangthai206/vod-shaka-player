@@ -1,6 +1,7 @@
 const Chapter = require("../model/Chapter");
 const Course = require("../model/Course");
 const Lesson = require("../model/Lesson");
+const Video = require("../model/Video");
 const User = require("../model/User")
 const fs = require('fs');
 const path = require('path');
@@ -177,6 +178,19 @@ const createLesson = async (req, res) => {
       --segment_duration 3`)
 
       console.log('generate manifest completed');
+
+      const newVideo = new Video({
+        name: fileName,
+        author: req.user.id,
+        fileLink: `http://127.0.0.1:3300/${fileName}.mpd`
+      });
+
+      await newVideo.save();
+
+      newLesson.video = newVideo._id;
+      await newLesson.save();
+
+      console.log('video created');
     }
 
   } catch (err) {
@@ -277,7 +291,7 @@ const getCourseDetails = async (req, res) => {
 
 const getLessonDetails = async (req, res) => {
   try {
-    const lesson = await Lesson.findOne({ _id: req.params.id }).populate({ path: "chapter", select: { 'course': 1 }, populate: { path: "course", select: { 'name': 1 } } });
+    const lesson = await Lesson.findOne({ _id: req.params.id }).populate({ path: "chapter", select: { 'course': 1 }, populate: { path: "course", select: { 'name': 1 } } }).populate({ path: "video", select: { 'fileLink': 1 } });
 
     if (!lesson) {
       return res.status(404).json({
