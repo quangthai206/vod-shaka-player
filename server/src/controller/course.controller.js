@@ -81,7 +81,7 @@ const createChapter = async (req, res) => {
     return res.status(201).json({
       status: true,
       message: "chapter created",
-      data: course.populate('chapter')
+      data: chapter
     })
   } catch (err) {
     console.log(err);
