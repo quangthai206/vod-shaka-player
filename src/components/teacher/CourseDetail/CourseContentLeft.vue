@@ -39,6 +39,32 @@
       </ul>
     </div>
 
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-chap">
+      Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-add-chap" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <form>
+              <div class="form-group">
+                <label for="title">Title: </label>
+                <input type="text" class="form-control" id="title" placeholder="Enter title" v-model="chapterTitle" required>
+              </div>
+              <button type="button" class="btn btn-primary" @click.prevent="addChap" data-dismiss="modal" aria-label="Close">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <ul id="course-lessons">
       <li
         v-for="(chapter, index) in chapters"
@@ -51,7 +77,7 @@
         <div class="info-chap">
           <div class="title-chap">
             <h2>{{ chapter.title }}</h2>
-            <p>{{ chapter.lessons.length }} lessons</p>
+            <p v-if=" chapter.lessons">{{ chapter.lessons.length }} lessons</p>
           </div>
           <div class="content-chap">
             <ul>
@@ -68,16 +94,51 @@
         </div>
       </li>
     </ul>
+    <div class="toast-success" v-if="visibleToastSucess">
+      Success
+    </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
+
+
 export default {
   name: "CourseContentLeft",
   props: ["chapters"],
   created() {
     console.log(this.chapters);
   },
+  data(){
+    return {
+      chapterTitle: "",
+      visibleToastSucess: false
+    }
+  },
+
+  methods: {
+    addChap(){
+      console.log(this.chapterTitle);
+
+      axios.post("http://localhost:3300/api/chapters/",
+              {courseId: this.$route.params.id, title: this.chapterTitle}
+              )
+
+      .then((res) => {
+
+        console.log(res.data.data)
+        this.$emit('addChap',res.data.data);
+        this.visibleToastSucess = true;
+        setTimeout(() => {
+          this.visibleToastSucess = false;
+        }, 2000);
+
+      })
+    }
+  }
+
+
 };
 </script>
 
@@ -93,6 +154,10 @@ export default {
 .content-left #destination-course ul {
   padding-left: 40px;
   margin-bottom: 50px;
+}
+
+.content-left #course-lessons {
+  margin-top: 40px;
 }
 
 .content-left #course-lessons,
@@ -162,4 +227,13 @@ export default {
   font-size: 16px;
   color: #766b93;
 }
+  .toast-success{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 300px;
+    height: 100px;
+    background-color: #ffffff;
+    text-align: center;
+  }
 </style>

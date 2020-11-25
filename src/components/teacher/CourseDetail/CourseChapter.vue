@@ -28,7 +28,7 @@
                 </ul>
             </div>
         </div>
-
+        <button class="btn btn-warning">Add lesson</button>
     </li>
 </template>
 

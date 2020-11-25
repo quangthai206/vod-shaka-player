@@ -5,7 +5,7 @@
       :subtitle="courseDetails.description"
     />
     <div class="course-content container-courses">
-      <CourseContentLeft :chapters="courseDetails.chapters" />
+      <CourseContentLeft :chapters="courseDetails.chapters" @addChap="addChap($event)"/>
     </div>
   </div>
 </template>
@@ -41,6 +41,15 @@ export default {
         this.isLoading = false;
       });
   },
+  methods:{
+      addChap(data){
+        if(data){
+          this.courseDetails.chapters.push(data);
+
+        }
+      }
+
+  }
 };
 </script>
 
