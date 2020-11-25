@@ -65,6 +65,92 @@
               </li>
             </ul>
           </div>
+          <button
+            type="button"
+            class="btn btn-success btn-modify"
+            data-toggle="modal"
+            data-target="#exampleModalLong"
+          >
+            Create new lesson
+          </button>
+          <div
+            class="modal fade"
+            id="exampleModalLong"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLongTitle"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">
+                    Create Lesson
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput">Title</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="formGroupExampleInput"
+                        placeholder="Example input"
+                        required
+                        v-model="title"
+                        name="title"
+                      />
+                      {{title}}
+                    </div>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">Description</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="formGroupExampleInput2"
+                        placeholder="Another input"
+                        required
+                        v-model="description"
+                        name="description"
+                      />
+                      {{description}}
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlFile1">Upload Video</label>
+                      <input
+                        type="file"
+                        class="form-control-file"
+                        id="exampleFormControlFile1"
+                        name="video"
+                        @change="onFileChange"
+                      />
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary" @click="createLesson()">
+                    Create
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </li>
     </ul>
@@ -72,12 +158,42 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: "CourseContentLeft",
   props: ["chapters"],
+  data() {
+    return {
+      title: '',
+      description: '',
+      chapterId: '',
+      video: null
+    }
+  },
+  methods: {
+    onFileChange(e) {
+      this.video = e.target.files.length ? e.target.files[0] : null
+      console.log(this.video)
+    },
+    createLesson() {
+      let formUpload = new FormData()
+      formUpload.append('title', this.title)
+      formUpload.append('description', this.description)
+      formUpload.append('video', this.video)
+      formUpload.append('chapterId', '5fba1f2cec036f73623d2f29')
+
+      axios({
+        method: 'post',
+        url: 'http://localhost:3300/api/lessons',
+        data: formUpload,
+        headers: { 'Content-Type': 'multipart/form-data'}
+      }).then( res => console.log(res))
+    }
+  },
   created() {
     console.log(this.chapters);
-  },
+  }
 };
 </script>
 
@@ -161,5 +277,15 @@ export default {
 .info-chap .content-chap li > a > p {
   font-size: 16px;
   color: #766b93;
+}
+
+.btn-modify {
+  margin-top: 5px;
+}
+
+.btn-modify:hover,
+.btn-modify:active,
+.btn-modify:focus {
+  outline: none;
 }
 </style>
