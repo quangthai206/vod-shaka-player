@@ -2,6 +2,25 @@ const Chapter = require("../model/Chapter");
 const Course = require("../model/Course");
 const Lesson = require("../model/Lesson");
 const User = require("../model/User")
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Executes a shell command and return it as a Promise.
+ * @param cmd {string}
+ * @return {Promise<string>}
+ */
+function execShellCommand(cmd) {
+  const exec = require('child_process').exec;
+  return new Promise((resolve, reject) => {
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        console.warn(error);
+      }
+      resolve(stdout ? stdout : stderr);
+    });
+  });
+}
 
 const createCourse = async (req, res) => {
   const { name, code, description } = req.body;
@@ -102,14 +121,21 @@ const updateChapterTitle = async (req, res) => {
 }
 
 const createLesson = async (req, res) => {
-  const { chapterId, title, description } = req.body;
+  const { chapterId, title, description, videoId } = req.body;
 
   try {
     const chapter = await Chapter.findOne({ _id: chapterId })
 
-    const newLesson = new Lesson();
-    newLesson.title = title;
-    newLesson.description = description;
+    const newLesson = new Lesson({
+      title,
+      description,
+      chapter: chapterId
+    });
+
+    // In case teacher chooses an available video
+    if (videoId) {
+      newLesson.video = videoId;
+    }
 
     await newLesson.save();
 
@@ -119,8 +145,18 @@ const createLesson = async (req, res) => {
     res.json({
       status: true,
       message: "create lesson successfully",
-      data: chapter
-    })
+      data: newLesson
+    });
+
+    // In case teacher upload new video
+    if (!videoId) {
+      const fileName = title.trim().toLowerCase().replace(/ /g, '-') + '-' + Date.now() + '.mp4';
+      const location = __dirname.replace('controller', 'public');
+      fs.writeFileSync(path.join(location, fileName), req.file.buffer);
+      console.log('write file completed');
+
+    }
+
   } catch (err) {
     console.log(err);
     res.status(500).json({
