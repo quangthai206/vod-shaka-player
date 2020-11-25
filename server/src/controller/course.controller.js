@@ -150,11 +150,33 @@ const createLesson = async (req, res) => {
 
     // In case teacher upload new video
     if (!videoId) {
-      const fileName = title.trim().toLowerCase().replace(/ /g, '-') + '-' + Date.now() + '.mp4';
+      const fileName = title.trim().toLowerCase().replace(/ /g, '-') + '_' + Date.now();
       const location = __dirname.replace('controller', 'public');
-      fs.writeFileSync(path.join(location, fileName), req.file.buffer);
+      const resultLocation = path.join(location, fileName + '.mp4');
+      fs.writeFileSync(resultLocation, req.file.buffer);
       console.log('write file completed');
 
+      const p1 = execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 256k -ar 48000 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 1500k -maxrate 1500k -bufsize 1000k -vf "scale=-1:720" ${path.join(location, fileName + '_720.mp4')}`);
+      const p2 = execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 128k -ar 44100 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 800k -maxrate 800k -bufsize 500k -vf "scale=-1:540" ${path.join(location, fileName + '_540.mp4')}`);
+      const p3 = execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 64k -ar 22050 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 400k -maxrate 400k -bufsize 400k -vf "scale=-1:360" ${path.join(location, fileName + '_360.mp4')}`);
+
+      await Promise.all([p1, p2, p3]);
+
+      console.log('transcoding completed');
+
+      await execShellCommand(`packager \
+      input=${path.join(location, fileName + '_720.mp4')},stream=audio,output=${path.join(location, fileName + '_720_audio.mp4')} \
+      input=${path.join(location, fileName + '_720.mp4')},stream=video,output=${path.join(location, fileName + '_720_video.mp4')} \
+      input=${path.join(location, fileName + '_540.mp4')},stream=audio,output=${path.join(location, fileName + '_540_audio.mp4')} \
+      input=${path.join(location, fileName + '_540.mp4')},stream=video,output=${path.join(location, fileName + '_540_video.mp4')} \
+      input=${path.join(location, fileName + '_360.mp4')},stream=audio,output=${path.join(location, fileName + '_360_audio.mp4')} \
+      input=${path.join(location, fileName + '_360.mp4')},stream=video,output=${path.join(location, fileName + '_360_video.mp4')} \
+      --profile on-demand \
+      --mpd_output ${path.join(location, fileName + '.mpd')} \
+      --min_buffer_time 3 \
+      --segment_duration 3`)
+
+      console.log('generate manifest completed');
     }
 
   } catch (err) {
