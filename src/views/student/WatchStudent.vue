@@ -1,12 +1,12 @@
 <template>
   <div v-if="!isLoading">
     <div class="watch-container container-courses">
-      <h2>
+      <h3>
         <router-link :to="'/courses/' + lesson.chapter.course._id"
-          ><i class="glyphicon glyphicon-arrow-left"></i>
+          ><i class="fa fa-arrow-left"></i>
           {{ lesson.chapter.course.name }}
         </router-link>
-      </h2>
+      </h3>
       <ShakaPlayer :manifest="lesson.video.fileLink" />
       <div class="watch-content">
         <div class="description">
@@ -17,7 +17,7 @@
         </div>
         <div class="watch-aside">
           <div class="download-video">
-            <div class="px-5 py-5 block text-blue-darkest">
+            <div class="text-blue-darkest">
               DOWNLOAD VIDEO
               <span
                 class="px-1 inline-block font-medium text-white bg-purple-lighter text-xs ml-2 rounded hover:text-white"
@@ -56,7 +56,7 @@
                     <ul class="list-reset flex items-start">
                       <li>
                         <i
-                          class="glyphicon glyphicon-menu-left text-grey text-xl cursor-not-allowed"
+                          class="fa fa-angle-left text-grey text-xl cursor-not-allowed"
                         ></i>
                       </li>
                       <li
@@ -67,9 +67,7 @@
                       </li>
                       <li>
                         <a href="#" title="Next Chapter: Working with Nuxt.js"
-                          ><i
-                            class="glyphicon glyphicon-menu-right text-green text-xl"
-                          ></i
+                          ><i class="fa fa-angle-right text-green text-xl"></i
                         ></a>
                       </li>
                     </ul>
@@ -95,7 +93,7 @@
                     </div>
                   </div>
                   <div class="mt-1 flex items-center justify-between">
-                    <h3 class="text-xl">Introduction to Nuxt.js</h3>
+                    <h4 class="text-xl">Introduction to Nuxt.js</h4>
                     <span class="hidden md:inline-block text-sm"
                       >3 lessons • 7 min</span
                     >
@@ -170,7 +168,7 @@
                       <a href="#" title="Up next Working with Nuxt.js"
                         >Working with Nuxt.js</a
                       >
-                      <span class="w-full mt-2 md:m-0 md:w-auto text-sm">
+                      <span class="w-full md:m-0 md:w-auto text-sm">
                         8 lessons • 19 min
                       </span>
                     </div>
@@ -222,8 +220,7 @@ export default {
 }
 
 .container-courses {
-  padding: 0 12%;
-  padding-top: 1px;
+  padding: 60px 90px 0 90px;
 }
 
 a {
@@ -240,8 +237,8 @@ i {
   margin-right: 8px;
 }
 
-h2 {
-  margin: 40px 0 32px 0;
+h3 {
+  margin-bottom: 35px;
   font-size: 26px;
 }
 
@@ -255,12 +252,12 @@ h2 {
 }
 
 .description {
-  width: 60%;
-  padding-right: 70px;
+  width: 55%;
+  padding-right: 50px;
 }
 
 .watch-aside {
-  width: 40%;
+  width: 45%;
 }
 
 h1 {
@@ -276,10 +273,6 @@ p {
 
 ul {
   padding-left: 40px;
-}
-
-.watch-aside {
-  padding-left: 70px;
 }
 
 .download-video {

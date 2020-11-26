@@ -4,8 +4,10 @@
       <Login></Login>
     </template>
     <template v-else>
-      <h1 v-if="$store.state.auth.user.role === 'student'">STUDENT HOME</h1>
-      <h1 v-else>TEACHER HOME</h1>
+      <div class="container-courses">
+        <h1 v-if="$store.state.auth.user.role === 'student'">STUDENT HOME</h1>
+        <h1 v-else>TEACHER HOME</h1>
+      </div>
     </template>
   </div>
 </template>
@@ -23,4 +25,10 @@ export default {
 </script>
 
 <style scoped>
+.container-courses {
+  min-height: calc(100vh - 54px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

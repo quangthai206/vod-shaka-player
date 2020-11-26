@@ -4,12 +4,12 @@
       <h1 class="intro-title">{{ title }}</h1>
       <h5 class="intro-subtitle">{{ subtitle }}</h5>
       <div class="course-intro-manip">
-        <a class="btn btn-success btn-start">
+        <a class="btn btn-success btn-start mr-4">
           <span class="fa fa-graduation-cap"></span>
           Start Course
         </a>
         <a class="btn btn-follow">
-          <span class="fa fa-star"></span>
+          <span class="far fa-star"></span>
           Follow
         </a>
       </div>
@@ -51,9 +51,7 @@ export default {
 }
 
 .course-intro .course-intro-content .course-intro-manip {
-  width: 56%;
   display: flex;
-  justify-content: space-between;
 }
 
 .btn-start,
