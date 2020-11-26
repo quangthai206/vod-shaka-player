@@ -57,7 +57,7 @@
             <ul>
               <li
                 class="nav-item"
-                v-for="lesson in chapter.lessons"
+                v-for="lesson in readyLessons(chapter.lessons)"
                 :key="lesson._id"
               >
                 <router-link :to="'/lessons/' + lesson._id">
@@ -81,6 +81,13 @@ export default {
   props: ["chapters"],
   created() {
     console.log(this.chapters);
+  },
+  methods: {
+    readyLessons(lessons) {
+      return lessons.filter((l) => {
+        return l.video;
+      });
+    },
   },
 };
 </script>

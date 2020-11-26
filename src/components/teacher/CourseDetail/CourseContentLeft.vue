@@ -39,6 +39,13 @@
       </ul>
     </div>
 
+    <b-button
+      v-b-modal.add-chapter-modal
+      variant="primary"
+      class="new-chapter-btn btn-lg"
+      ><i class="fas fa-plus"></i> New Chapter</b-button
+    >
+
     <ul id="course-lessons">
       <li
         v-for="(chapter, index) in chapters"
@@ -51,13 +58,27 @@
         <div class="info-chap">
           <div class="title-chap">
             <h2>{{ chapter.title }}</h2>
-            <p>{{ chapter.lessons.length }} lessons</p>
+            <div>
+              <span class="lessons-quantity"
+                >{{ chapter.lessons.length }} lessons</span
+              >
+              <b-button
+                v-b-modal.add-lesson-modal
+                pill
+                variant="success"
+                @click="chapterId = chapter._id"
+                >Add Lesson</b-button
+              >
+            </div>
           </div>
           <div class="content-chap">
             <ul>
               <li v-for="lesson in chapter.lessons" :key="lesson._id">
-                <a>
-                  <span class="fa fa-play"></span>
+                <a id="lesson-row">
+                  <span
+                    class="fa fa-play"
+                    :class="{ 'disabled-play': !lesson.video }"
+                  ></span>
                   <p>
                     <b>{{ lesson.title }}</b>
                   </p>
@@ -68,15 +89,160 @@
         </div>
       </li>
     </ul>
+
+    <b-modal id="add-chapter-modal" no-close-on-backdrop>
+      <template #modal-title>New Chapter</template>
+      <template #modal-footer="{ cancel }">
+        <button @click="cancel()" type="button" class="btn btn-secondary">
+          Cancel</button
+        ><button type="button" class="btn btn-primary" @click="addNewChapter">
+          Submit
+        </button>
+      </template>
+      <b-form ref="add-chapter-form" @submit.prevent>
+        <b-form-group label="Enter title:" label-for="chapter-title-input">
+          <b-form-input
+            id="chapter-title-input"
+            ref="chapter-title"
+            type="text"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <button ref="submit-new-chapter-btn" style="display: none"></button>
+      </b-form>
+    </b-modal>
+
+    <b-modal id="add-lesson-modal" no-close-on-backdrop>
+      <template #modal-title>New Lesson</template>
+      <template #modal-footer="{ cancel }">
+        <button @click="cancel()" type="button" class="btn btn-secondary">
+          Cancel</button
+        ><button type="button" class="btn btn-primary" @click="addNewLesson">
+          Submit
+        </button>
+      </template>
+      <b-form ref="add-lesson-form" @submit.prevent>
+        <b-form-group label="Title:" label-for="lesson-title-input">
+          <b-form-input
+            id="lesson-title-input"
+            ref="lesson-title"
+            required
+            placeholder="Enter title"
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Description:" label-for="lesson-des-input">
+          <b-form-input
+            id="lesson-des-input"
+            ref="lesson-description"
+            required
+            placeholder="Enter description"
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Video:" label-for="lesson-video-input">
+          <b-form-file
+            ref="lesson-video"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+            accept=".mp4"
+            required
+          ></b-form-file>
+        </b-form-group>
+        <button ref="submit-new-lesson-btn" style="display: none"></button>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "CourseContentLeft",
   props: ["chapters"],
   created() {
     console.log(this.chapters);
+  },
+  data() {
+    return {
+      chapterId: undefined,
+    };
+  },
+  methods: {
+    addNewChapter() {
+      this.$refs["submit-new-chapter-btn"].click();
+      if (this.$refs["add-chapter-form"].checkValidity()) {
+        const title = this.$refs["chapter-title"].localValue;
+        const courseId = this.$route.params.id;
+
+        axios
+          .post("http://localhost:3300/api/chapters", { title, courseId })
+          .then((res) => {
+            console.log(res.data.data);
+            this.$emit("add-chapter", res.data.data);
+            this.$bvToast.toast("Chapter created successfully!", {
+              title: "Success",
+              variant: "success",
+              solid: true,
+              autoHideDelay: 4000,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$bvToast.toast("Something went wrong :(", {
+              title: "Error",
+              variant: "danger",
+              solid: true,
+              autoHideDelay: 4000,
+            });
+          });
+
+        this.$bvModal.hide("add-chapter-modal");
+      }
+    },
+
+    addNewLesson() {
+      this.$refs["submit-new-lesson-btn"].click();
+      if (this.$refs["add-lesson-form"].checkValidity()) {
+        const chapterId = this.chapterId;
+
+        let formUpload = new FormData();
+        formUpload.append("title", this.$refs["lesson-title"].localValue);
+        formUpload.append(
+          "description",
+          this.$refs["lesson-description"].localValue
+        );
+        formUpload.append("video", this.$refs["lesson-video"].files[0]);
+        formUpload.append("chapterId", chapterId);
+
+        axios({
+          method: "post",
+          url: "http://localhost:3300/api/lessons",
+          data: formUpload,
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+          .then((res) => {
+            console.log(res.data.data);
+            this.$emit("add-lesson", res.data.data);
+            this.$bvToast.toast("Lesson created successfully!", {
+              title: "Success",
+              variant: "success",
+              solid: true,
+              autoHideDelay: 4000,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$bvToast.toast("Something went wrong :(", {
+              title: "Error",
+              variant: "danger",
+              solid: true,
+              autoHideDelay: 4000,
+            });
+          });
+
+        this.$bvModal.hide("add-lesson-modal");
+      }
+    },
   },
 };
 </script>
@@ -95,10 +261,14 @@ export default {
   margin-bottom: 50px;
 }
 
-.content-left ul#course-lessons,
-.content-left ul#course-lessons ul {
+.content-left ul#course-lessons {
+  margin-top: 30px;
   list-style-type: none;
   width: 80%;
+}
+
+.content-chap ul {
+  list-style-type: none;
 }
 
 .lessons-chap {
@@ -162,5 +332,18 @@ export default {
 .info-chap .content-chap li > a > p {
   font-size: 16px;
   color: #766b93;
+}
+
+.new-chapter-btn {
+  font-size: 17px;
+}
+
+.lessons-quantity {
+  margin-right: 25px;
+}
+
+#lesson-row .disabled-play {
+  color: #b3b3b3;
+  border: solid 3px #b3b3b3;
 }
 </style>

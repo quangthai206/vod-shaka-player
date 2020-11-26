@@ -5,7 +5,11 @@
       :subtitle="courseDetails.description"
     />
     <div class="course-content container-courses">
-      <CourseContentLeft :chapters="courseDetails.chapters" />
+      <CourseContentLeft
+        :chapters="courseDetails.chapters"
+        @add-chapter="addChapterHandler"
+        @add-lesson="addLessonHandler"
+      />
     </div>
   </div>
 </template>
@@ -25,6 +29,20 @@ export default {
       isLoading: false,
       courseDetails: null,
     };
+  },
+  methods: {
+    addChapterHandler(newChapter) {
+      this.courseDetails.chapters.push(newChapter);
+    },
+    addLessonHandler(newLesson) {
+      console.log("from parent handler");
+      console.log(newLesson);
+      this.courseDetails.chapters.forEach((chapter) => {
+        if (chapter._id === newLesson.chapter) {
+          chapter.lessons.push(newLesson);
+        }
+      });
+    },
   },
   created() {
     this.isLoading = true;

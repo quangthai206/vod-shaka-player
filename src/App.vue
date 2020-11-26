@@ -25,8 +25,8 @@ export default {
   box-sizing: border-box;
 }
 
-#app {
-  font-family: "Rubik", sans-serif;
+body {
+  font-family: "Rubik", sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
