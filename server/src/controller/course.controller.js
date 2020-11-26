@@ -5,23 +5,7 @@ const Video = require("../model/Video");
 const User = require("../model/User")
 const fs = require('fs');
 const path = require('path');
-
-/**
- * Executes a shell command and return it as a Promise.
- * @param cmd {string}
- * @return {Promise<string>}
- */
-function execShellCommand(cmd) {
-  const exec = require('child_process').exec;
-  return new Promise((resolve, reject) => {
-    exec(cmd, (error, stdout, stderr) => {
-      if (error) {
-        console.warn(error);
-      }
-      resolve(stdout ? stdout : stderr);
-    });
-  });
-}
+const utils = require('../utils/Utils')
 
 const createCourse = async (req, res) => {
   const { name, code, description } = req.body;
@@ -69,13 +53,13 @@ const createChapter = async (req, res) => {
       })
     }
 
-
-    const chapter = new Chapter();
-
-    chapter.title = title;
+    const chapter = new Chapter({
+      title,
+      course: courseId
+    });
     await chapter.save()
-    course.chapters.push(chapter._id);
 
+    course.chapters.push(chapter._id);
     await course.save()
 
     return res.status(201).json({
@@ -157,15 +141,15 @@ const createLesson = async (req, res) => {
       fs.writeFileSync(resultLocation, req.file.buffer);
       console.log('write file completed');
 
-      const p1 = execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 256k -ar 48000 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 1500k -maxrate 1500k -bufsize 1000k -vf "scale=-1:720" ${path.join(location, fileName + '_720.mp4')}`);
-      const p2 = execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 128k -ar 44100 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 800k -maxrate 800k -bufsize 500k -vf "scale=-1:540" ${path.join(location, fileName + '_540.mp4')}`);
-      const p3 = execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 64k -ar 22050 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 400k -maxrate 400k -bufsize 400k -vf "scale=-1:360" ${path.join(location, fileName + '_360.mp4')}`);
+      const p1 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 256k -ar 48000 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 1500k -maxrate 1500k -bufsize 1000k -vf "scale=-1:720" ${path.join(location, fileName + '_720.mp4')}`);
+      const p2 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 128k -ar 44100 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 800k -maxrate 800k -bufsize 500k -vf "scale=-1:540" ${path.join(location, fileName + '_540.mp4')}`);
+      const p3 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 64k -ar 22050 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 400k -maxrate 400k -bufsize 400k -vf "scale=-1:360" ${path.join(location, fileName + '_360.mp4')}`);
 
       await Promise.all([p1, p2, p3]);
 
       console.log('transcoding completed');
 
-      await execShellCommand(`packager \
+      await utils.execShellCommand(`packager \
       input=${path.join(location, fileName + '_720.mp4')},stream=audio,output=${path.join(location, fileName + '_720_audio.mp4')} \
       input=${path.join(location, fileName + '_720.mp4')},stream=video,output=${path.join(location, fileName + '_720_video.mp4')} \
       input=${path.join(location, fileName + '_540.mp4')},stream=audio,output=${path.join(location, fileName + '_540_audio.mp4')} \
