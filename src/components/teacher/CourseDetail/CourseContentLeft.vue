@@ -57,7 +57,7 @@
             <ul>
               <li v-for="lesson in chapter.lessons" :key="lesson._id">
                 <a>
-                  <span class="glyphicon glyphicon-play"></span>
+                  <span class="fa fa-play"></span>
                   <p>
                     <b>{{ lesson.title }}</b>
                   </p>
@@ -95,9 +95,10 @@ export default {
   margin-bottom: 50px;
 }
 
-.content-left #course-lessons,
-.content-left #course-lessons ul {
+.content-left ul#course-lessons,
+.content-left ul#course-lessons ul {
   list-style-type: none;
+  width: 80%;
 }
 
 .lessons-chap {
@@ -151,7 +152,7 @@ export default {
 
 .info-chap .content-chap li > a > span {
   color: #5cceac;
-  padding: 1px;
+  padding: 3px;
   text-align: center;
   border: solid 3px #bcebdd;
   border-radius: 50%;

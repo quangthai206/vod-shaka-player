@@ -55,9 +55,13 @@
           </div>
           <div class="content-chap">
             <ul>
-              <li v-for="lesson in chapter.lessons" :key="lesson._id">
+              <li
+                class="nav-item"
+                v-for="lesson in chapter.lessons"
+                :key="lesson._id"
+              >
                 <router-link :to="'/lessons/' + lesson._id">
-                  <span class="glyphicon glyphicon-play"></span>
+                  <span class="fa fa-play"></span>
                   <p>
                     <b>{{ lesson.title }}</b>
                   </p>
@@ -151,7 +155,7 @@ export default {
 
 .info-chap .content-chap li > a > span {
   color: #5cceac;
-  padding: 1px;
+  padding: 3px;
   text-align: center;
   border: solid 3px #bcebdd;
   border-radius: 50%;

@@ -1,11 +1,11 @@
+import '@babel/polyfill'
+import 'mutationobserver-shim'
 import Vue from 'vue'
+import './plugins/bootstrap-vue'
 import App from './App.vue'
 import router from './router'
 import store from './store';
-import VueFileAgent from 'vue-file-agent';
 import axios from 'axios'
-
-Vue.use(VueFileAgent);
 
 Vue.config.productionTip = false;
 

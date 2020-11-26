@@ -5,11 +5,11 @@
       <h5 class="intro-subtitle">{{ subtitle }}</h5>
       <div class="course-intro-manip">
         <a class="btn btn-success btn-start">
-          <span class="glyphicon glyphicon-education"></span>
+          <span class="fa fa-graduation-cap"></span>
           Start Course
         </a>
         <a class="btn btn-follow">
-          <span class="glyphicon glyphicon-star"></span>
+          <span class="fa fa-star"></span>
           Follow
         </a>
       </div>
@@ -51,7 +51,7 @@ export default {
 }
 
 .course-intro .course-intro-content .course-intro-manip {
-  width: 50%;
+  width: 56%;
   display: flex;
   justify-content: space-between;
 }

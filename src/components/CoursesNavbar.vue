@@ -1,29 +1,36 @@
 <template>
   <div>
-    <nav class="navbar navbar-default"></nav>
-    <nav class="navbar navbar-inverse navbar-fixed-top courses-top-nav">
-      <div class="container-courses">
-        <div class="navbar-header">
-          <router-link to="/" class="navbar-brand courses-logo">
-            <img src="../assets/method-draw-image_1.svg" alt="" width="150px" />
-          </router-link>
-        </div>
-        <ul class="nav navbar-nav courses-menu">
-          <router-link to="/courses" tag="li"><a>Courses</a></router-link>
-          <li><a href="#">Plans</a></li>
-          <li><a href="#">Contacts</a></li>
+    <div class="padded-nav"></div>
+
+    <nav class="navbar fixed-top courses-top-nav navbar-expand-lg">
+      <div class="navbar-header">
+        <router-link to="/" class="navbar-brand courses-logo">
+          <img src="../assets/method-draw-image_1.svg" alt="" width="150px" />
+        </router-link>
+      </div>
+      <div class="navbar-body">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <router-link to="/courses" class="nav-link">Courses</router-link>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Plans</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Contacts</a>
+          </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <a href="#"><span class="glyphicon glyphicon-search"></span></a>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link"><span class="fa fa-search"></span></a>
           </li>
-          <li>
-            <a href="#"
-              ><span class="glyphicon glyphicon-user"></span> Profile</a
+          <li class="nav-item">
+            <a class="nav-link"><span class="fa fa-user"></span> Profile</a>
+          </li>
+          <li class="nav-item" @click="logout">
+            <a class="nav-link"
+              ><span class="fa fa-sign-out-alt"></span> Logout</a
             >
-          </li>
-          <li @click="logout">
-            <a><span class="glyphicon glyphicon-log-out"></span> Logout</a>
           </li>
         </ul>
       </div>
@@ -48,6 +55,25 @@ export default {
 .navbar {
   margin: 0;
   border: none;
+  padding: 0 90px;
+}
+
+.navbar-expand-lg .navbar-nav > li > a {
+  color: #9d9d9d;
+  padding: 15px;
+}
+
+.navbar-expand-lg .navbar-nav > li:last-child > a {
+  padding-right: 0;
+}
+
+.navbar-nav > li > a:hover {
+  color: #fff;
+}
+
+.navbar-body {
+  display: flex;
+  flex-grow: 1;
 }
 
 .courses-logo {
@@ -61,6 +87,10 @@ export default {
   border-radius: 0;
   background-color: #1d185e;
   font-size: 16px;
+}
+
+.padded-nav {
+  min-height: 54px;
 }
 
 a {

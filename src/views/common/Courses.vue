@@ -14,10 +14,14 @@
     </div>
     <div class="courses-filter">
       <div id="type-class">
-        <ul class="nav nav-tabs nav-types">
-          <li><a href="#">Premium</a></li>
-          <li><a href="#">Free</a></li>
-          <li><a href="#">Master Class</a></li>
+        <ul class="nav nav-types">
+          <li class="nav-item">
+            <a class="nav-link active">Premium</a>
+          </li>
+          <li class="nav-item"><a class="nav-link active">Free</a></li>
+          <li class="nav-item">
+            <a class="nav-link active">Master Class</a>
+          </li>
         </ul>
       </div>
       <div id="filters-dropdown">
@@ -59,7 +63,6 @@
         </div>
         <div class="course-item-desc">
           <h3 class="course-title">{{ course.name }}</h3>
-          <br />
           <p
             class="course-subtitle"
             :class="{ 'course-subtitle-teacher': role === 'teacher' }"
@@ -67,7 +70,7 @@
             {{ course.description }}
           </p>
           <div v-if="role === 'student'" class="course-lecturers">
-            <span class="label label-default">{{ course.teacher.name }}</span>
+            <span class="badge badge-secondary">{{ course.teacher.name }}</span>
           </div>
         </div>
       </div>
@@ -103,7 +106,7 @@ export default {
 <style scoped>
 .courses-body {
   background-color: #edf3ff;
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh - 54px);
 }
 
 .courses-body .courses-header {
@@ -123,6 +126,11 @@ export default {
 .courses-filter #type-class .nav-types {
   border-radius: 10px;
   border: solid 1px #d5e4ff;
+}
+
+.courses-filter #type-class .nav-types a:hover {
+  border-radius: 10px;
+  background-color: #eee;
 }
 
 .nav-types li a {
@@ -175,7 +183,7 @@ export default {
 }
 
 .courses-list .course-item .course-item-img {
-  height: 20rem;
+  height: 15rem;
   overflow: hidden;
 }
 
@@ -199,11 +207,12 @@ export default {
 .course-item-desc .course-title {
   color: #38416f;
   font-size: 26px;
+  margin-bottom: 1.1rem;
 }
 
 .course-item-desc .course-subtitle {
   color: #766b93;
-  margin-bottom: 5em;
+  margin-bottom: 4em;
 }
 
 .course-item-desc .course-subtitle-teacher {
@@ -219,5 +228,9 @@ export default {
   text-transform: uppercase;
   position: absolute;
   bottom: 20px;
+}
+
+a {
+  cursor: pointer;
 }
 </style>

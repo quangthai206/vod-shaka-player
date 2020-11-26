@@ -6,23 +6,23 @@
       </a>
 
       <div class="login-welcome">
-        <h2>Chào mừng đến với Elearning!</h2>
-        <br /><br />
-        <h4>Elearning - Hệ thống học trực tuyến phổ biến nhất 2020.</h4>
+        <h3>Welcome to VSchool</h3>
+        <br />
+        <h5>The most popular online learning system 2020.</h5>
       </div>
 
-      <div class="login-copyright">© 2019 ExamReg</div>
+      <div class="login-copyright">© 2020 VSchool</div>
     </div>
     <div class="login-right">
       <form novalidate>
         <center>
-          <h1 id="form-title">Đăng nhập vào hệ thống</h1>
+          <h1 id="form-title">Login</h1>
         </center>
 
         <div>
           <input
             type="email"
-            placeholder="Nhập email"
+            placeholder="Enter email"
             name="email"
             id="email"
             v-model="email"
@@ -32,7 +32,7 @@
         <div>
           <input
             type="password"
-            placeholder="Nhập password"
+            placeholder="Enter password"
             name="password"
             id="password"
             v-model="password"
@@ -43,10 +43,10 @@
         <div class="error">{{ error }}</div>
 
         <div class="row-submit">
-          <a href="#">Quên mật khẩu?</a>
+          <a href="#">Forgot password?</a>
           <input
             type="submit"
-            value="Đăng nhập"
+            value="Submit"
             id="submit-btn"
             :disabled="disabled"
             :class="{ disabled: disabled }"
@@ -101,9 +101,6 @@ export default {
 </script>
 
 <style scoped>
-* {
-  font-family: "Times New Roman";
-}
 .login-page {
   display: flex;
   height: 100vh;
@@ -121,7 +118,8 @@ export default {
   justify-content: space-between;
 }
 
-.login-welcome h4 {
+.login-welcome h5,
+.login-copyright {
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -145,11 +143,11 @@ export default {
 
 .error {
   color: red;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 #form-title {
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .row-submit {
@@ -172,8 +170,8 @@ export default {
 #submit-btn {
   width: 120px;
   background-color: #5e6eea;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
   border-radius: 5px;
   border: none;
   outline: none;
