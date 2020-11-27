@@ -3,7 +3,12 @@
     <div class="course-intro-content">
       <h1 class="intro-title">{{ title }}</h1>
       <h5 class="intro-subtitle">{{ subtitle }}</h5>
-      <div class="course-intro-manip">
+      <div
+        v-if="
+          $store.state.auth.user && $store.state.auth.user.role === 'student'
+        "
+        class="course-intro-manip"
+      >
         <a class="btn btn-success btn-start mr-4">
           <span class="fa fa-graduation-cap"></span>
           Start Course

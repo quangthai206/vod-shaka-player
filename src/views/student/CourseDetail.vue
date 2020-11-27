@@ -6,7 +6,7 @@
     />
     <div class="course-content container-courses">
       <CourseContentLeft :chapters="courseDetails.chapters" />
-      <CourseContentRight />
+      <CourseContentRight :teacher="courseDetails.teacher" />
     </div>
   </div>
 </template>

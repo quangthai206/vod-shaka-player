@@ -10,7 +10,7 @@
           style="width: 60px; height: 60px"
         />
         <div class="media-body">
-          <h5 class="media-heading">TS. Duong Le Minh</h5>
+          <h5 class="media-heading">{{ teacher.name }}</h5>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -24,6 +24,7 @@
 <script>
 export default {
   name: "CourseContentRight",
+  props: ["teacher"],
 };
 </script>
 

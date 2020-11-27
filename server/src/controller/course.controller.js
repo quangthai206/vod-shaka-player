@@ -250,7 +250,7 @@ const getCourses = async (req, res) => {
 
 const getCourseDetails = async (req, res) => {
   try {
-    const course = await Course.findOne({ _id: req.params.id }).populate({ path: "chapters", populate: { path: "lessons" } });
+    const course = await Course.findOne({ _id: req.params.id }).populate({ path: "chapters", populate: { path: "lessons" } }).populate('teacher');
 
     if (!course) {
       return res.status(404).json({
