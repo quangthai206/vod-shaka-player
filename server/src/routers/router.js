@@ -8,7 +8,6 @@ const upload = multer();
 
 router.post("/user", userController.createUser);
 router.post("/login", userController.login);
-router.post("/videos", videoController.createVideo);
 
 router.post("/courses", courseController.createCourse);
 router.get("/courses", auth, courseController.getCourses);
@@ -18,7 +17,8 @@ router.patch("/chapters", courseController.updateChapterTitle)
 router.get("/lessons/:id", courseController.getLessonDetails)
 router.post("/lessons", auth, upload.single('video'), courseController.createLesson)
 router.patch("/lessons", courseController.updateLesson)
-router.get("/video/file", videoController.getFileManifest);
+
+router.get("/videos", auth,  videoController.getVideos)
 
 router.post("/users", userController.createUser);
 router.post("/login", userController.login);
