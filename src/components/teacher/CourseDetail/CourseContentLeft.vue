@@ -138,14 +138,24 @@
             placeholder="Enter description"
           ></b-form-input>
         </b-form-group>
-        <b-form-group >
-          <b-form-checkbox v-model="chooseAvailableVideo"> Select available videos
+        <b-form-group>
+          <b-form-checkbox v-model="chooseAvailableVideo">
+            Select available videos
           </b-form-checkbox>
         </b-form-group>
         <b-form-group v-if="chooseAvailableVideo">
-          <b-form-select ref="lesson-video-id" :options="listVideo" label="Select video" :required="chooseAvailableVideo"/>
+          <b-form-select
+            ref="lesson-video-id"
+            :options="listVideo"
+            label="Select video"
+            :required="chooseAvailableVideo"
+          />
         </b-form-group>
-        <b-form-group v-if="!chooseAvailableVideo" label="Upload video:" label-for="lesson-video-input">
+        <b-form-group
+          v-if="!chooseAvailableVideo"
+          label="Upload video:"
+          label-for="lesson-video-input"
+        >
           <b-form-file
             ref="lesson-video"
             placeholder="Choose a file or drop it here..."
@@ -167,7 +177,7 @@ export default {
   name: "CourseContentLeft",
   props: ["chapters"],
   created() {
-    this.getVideo()
+    this.getVideo();
   },
   data() {
     return {
@@ -185,23 +195,23 @@ export default {
 
         axios
           .post("http://localhost:3300/api/chapters", { title, courseId })
-          .then((res) => {
+          .then(res => {
             console.log(res.data.data);
             this.$emit("add-chapter", res.data.data);
             this.$bvToast.toast("Chapter created successfully!", {
               title: "Success",
               variant: "success",
               solid: true,
-              autoHideDelay: 4000,
+              autoHideDelay: 4000
             });
           })
-          .catch((err) => {
+          .catch(err => {
             console.log(err);
             this.$bvToast.toast("Something went wrong :(", {
               title: "Error",
               variant: "danger",
               solid: true,
-              autoHideDelay: 4000,
+              autoHideDelay: 4000
             });
           });
 
@@ -223,7 +233,10 @@ export default {
         formUpload.append("chapterId", chapterId);
 
         if (this.chooseAvailableVideo) {
-          formUpload.append("videoId", this.$refs['lesson-video-id'].localValue)
+          formUpload.append(
+            "videoId",
+            this.$refs["lesson-video-id"].localValue
+          );
         } else {
           formUpload.append("video", this.$refs["lesson-video"].files[0]);
         }
@@ -232,41 +245,43 @@ export default {
           method: "post",
           url: "http://localhost:3300/api/lessons",
           data: formUpload,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "multipart/form-data" }
         })
-          .then((res) => {
+          .then(res => {
             console.log(res.data.data);
             this.$emit("add-lesson", res.data.data);
             this.$bvToast.toast("Lesson created successfully!", {
               title: "Success",
               variant: "success",
               solid: true,
-              autoHideDelay: 4000,
+              autoHideDelay: 4000
             });
           })
-          .catch((err) => {
+          .catch(err => {
             console.log(err);
             this.$bvToast.toast("Something went wrong :(", {
               title: "Error",
               variant: "danger",
               solid: true,
-              autoHideDelay: 4000,
+              autoHideDelay: 4000
             });
           });
 
         this.$bvModal.hide("add-lesson-modal");
       }
     },
-    
-    getVideo() {
-      axios.get('http://localhost:3300/api/videos').then( res => {
-        const videos = res.data;
-        this.listVideo = videos.data.map( item => ({ value: item._id, text: item.name }))
-        console.log(this.listVideo)
-        })
-    }
 
-  },
+    getVideo() {
+      axios.get("http://localhost:3300/api/videos").then(res => {
+        const videos = res.data;
+        this.listVideo = videos.data.map(item => ({
+          value: item._id,
+          text: item.name
+        }));
+        console.log(this.listVideo);
+      });
+    }
+  }
 };
 </script>
 

@@ -20,13 +20,13 @@ const createUser = async (req, res) => {
 
     user.email = email;
     user.password = await bcrypt.hash(password, salt);
-    user.courses = []
+    user.courses = [];
     if (role) {
       user.role = role;
     }
 
-    if(courseId) {
-      user.courses.unshift(courseId)
+    if (courseId) {
+      user.courses.unshift(courseId);
     }
 
     await user.save();
@@ -108,8 +108,8 @@ const checkToken = (req, res) => {
     user: {
       id: req.user.id,
       email: req.user.email,
-      role: req.user.role
-    }
+      role: req.user.role,
+    },
   });
 };
 module.exports = {

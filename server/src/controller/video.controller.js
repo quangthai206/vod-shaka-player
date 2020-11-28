@@ -1,22 +1,22 @@
 const Video = require("../model/Video");
 
-const getVideos = async(req, res) => {
+const getVideos = async (req, res) => {
   try {
-    const videos = await Video.find({author: req.user.id})
+    const videos = await Video.find({ author: req.user.id });
     return res.status(200).json({
       status: true,
       message: "success",
-      data: videos  
-    })
+      data: videos,
+    });
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     return res.status(500).json({
       status: false,
-      message: err.message
-    })
+      message: err.message,
+    });
   }
-}
+};
 
 module.exports = {
-  getVideos
+  getVideos,
 };

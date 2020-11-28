@@ -41,32 +41,34 @@
                     background: rgb(246, 245, 249) none repeat scroll 0% 0%;
                   "
                 >
-                  <a href="#" class="hover:no-underline flex items-center"
-                    ><a
-                      href="/courses/nuxtjs-fundamentals"
-                      title="Course Overview of Nuxt.js Fundamentals"
-                      class="hover:no-underline"
-                      ><i class="fas fa-arrow-left text-green mr-1"></i>
-                      Nuxt.js Fundamentals
-                    </a></a
+                  <a href="#" class="hover:no-underline flex items-center">
+                    <router-link :to="'/courses/' + lesson.chapter.course._id">
+                      <i class="fas fa-arrow-left text-green mr-1"></i>
+                      {{ lesson.chapter.course.name }}
+                    </router-link></a
                   >
                 </div>
                 <div class="px-4 md:px-8">
                   <div class="mt-6 mb-4 flex justify-between items-center">
                     <ul class="list-reset flex items-start">
                       <li>
-                        <i
-                          class="fa fa-angle-left text-grey text-xl cursor-not-allowed"
-                        ></i>
+                        <a @click.prevent="prevChapter">
+                          <i
+                            class="fa fa-angle-left text-green text-xl cursor-not-allowed"
+                          ></i>
+                        </a>
                       </li>
                       <li
                         class="flex items-center text-sm justify-center"
                         style="min-width: 73px; font-size: 15px"
                       >
-                        Chapter 1
+                        Chapter {{ order + 1 }}
                       </li>
                       <li>
-                        <a href="#" title="Next Chapter: Working with Nuxt.js"
+                        <a
+                          href="#"
+                          title="Next Chapter: Working with Nuxt.js"
+                          @click.prevent="nextChapter"
                           ><i class="fa fa-angle-right text-green text-xl"></i
                         ></a>
                       </li>
@@ -93,13 +95,17 @@
                     </div>
                   </div>
                   <div class="mt-1 flex items-center justify-between">
-                    <h4 class="text-xl">Introduction to Nuxt.js</h4>
+                    <h4 class="text-xl">{{ playlist[order].title }}</h4>
                     <span class="hidden md:inline-block text-sm"
-                      >3 lessons • 7 min</span
+                      >{{ playlist[order].lessons.length }} lessons</span
                     >
                   </div>
                   <div class="lessons mt-6">
-                    <div class="lesson leading-tight watching-lesson">
+                    <div
+                      v-for="item in playlist[order].lessons"
+                      :key="item._id"
+                      class="lesson leading-tight watching-lesson"
+                    >
                       <div class="flex">
                         <div
                           class="flex justify-center items-center"
@@ -108,12 +114,12 @@
                           <i class="fas fa-play text-green"></i>
                         </div>
                         <span
-                          ><a
-                            href="/lessons/what-is-nuxtjs"
+                          ><router-link
+                            :to="`${item._id}`"
                             title="Go to Vue.js lesson: What is Nuxt.js?"
                           >
-                            What is Nuxt.js?
-                          </a></span
+                            {{ item.title }}
+                          </router-link></span
                         >
                         <div class="flex items-center"><!----></div>
                       </div>
@@ -193,24 +199,56 @@ export default {
     return {
       isLoading: false,
       lesson: null,
+      courseId: null,
+      playlist: [],
+      order: 0
     };
   },
   created() {
     this.isLoading = true;
-    const lessonId = this.$route.params.id;
-    axios
-      .get(`http://localhost:3300/api/lessons/${lessonId}`)
-      .then((res) => {
-        console.log(res.data.data);
-        this.lesson = res.data.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
+    this.getLesson();
   },
+  methods: {
+    getLesson: function() {
+      const lessonId = this.$route.params.id;
+
+      return axios
+        .get(`http://localhost:3300/api/lessons/${lessonId}`)
+        .then(res => {
+          this.lesson = res.data.data;
+          this.courseId = this.lesson.chapter.course._id.toString();
+          this.order = this.lesson.chapter.order || 0;
+          this.getChapters(this.courseId);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getChapters: function(courseId) {
+      return axios
+        .get(`http://localhost:3300/api/chapters/${courseId}`)
+        .then(res => {
+          this.playlist = res.data.data;
+        });
+    },
+    nextChapter: function() {
+      if (this.order === this.playlist.length - 1) {
+        this.order = 0;
+      } else {
+        this.order++;
+      }
+    },
+    prevChapter: function() {
+      if (this.order === 0) {
+        this.order = this.playlist.length - 1;
+      } else {
+        this.order--;
+      }
+    }
+  }
 };
 </script>
 

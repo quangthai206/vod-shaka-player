@@ -12,7 +12,21 @@ connectDb();
 const port = process.env.PORT || 3300;
 
 app.use(cors());
-app.use(express.static(__dirname + '/public'));
+
+app.use((req, res, next) => {
+  if (req.url.endsWith(".mp4")) {
+    console.log(req.header("Authorization"));
+    console.log(req.url);
+    res.status(503).json({
+      status: "error",
+      message: "Server is busy",
+    });
+  } else {
+    next();
+  }
+});
+
+app.use(express.static(__dirname + "/public"));
 
 // for parsing application/json
 app.use(bodyParser.json());
