@@ -14,17 +14,16 @@ const port = process.env.PORT || 3300;
 app.use(cors());
 
 app.use((req, res, next) => {
-  if (req.url.endsWith('.mp4')) {
-    console.log(req.header('Authorization'));
+  if (req.url.endsWith(".mp4")) {
+    console.log(req.header("Authorization"));
     console.log(req.url);
     res.status(503).json({
-      status: 'error',
-      message: 'Server is busy'
+      status: "error",
+      message: "Server is busy",
     });
   } else {
     next();
   }
-
 })
 
 app.use(express.static(__dirname + '/public'));

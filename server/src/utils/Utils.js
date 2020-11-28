@@ -4,7 +4,7 @@
  * @return {Promise<string>}
  */
 const execShellCommand = (cmd) => {
-  const exec = require('child_process').exec;
+  const exec = require("child_process").exec;
   return new Promise((resolve) => {
     exec(cmd, (error, stdout, stderr) => {
       if (error) {
@@ -13,8 +13,8 @@ const execShellCommand = (cmd) => {
       resolve(stdout ? stdout : stderr);
     });
   });
-}
+};
 
 module.exports = {
-  execShellCommand
-}
+  execShellCommand,
+};

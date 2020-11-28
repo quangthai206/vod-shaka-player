@@ -23,8 +23,8 @@ const CourseSchema = new Schema(
     chapters: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'chapter'
-      }
+        ref: "chapter",
+      },
     ],
   },
   {

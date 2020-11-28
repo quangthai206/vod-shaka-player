@@ -9,14 +9,18 @@ const ChapterSchema = new Schema({
   },
   course: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'course'
+    ref: "course",
   },
   lessons: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'lesson'
-    }
+      ref: "lesson",
+    },
   ],
+  order: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("chapter", ChapterSchema);
