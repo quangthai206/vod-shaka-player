@@ -45,6 +45,17 @@ export default {
     //Initialize shaka player
     var player = new shaka.Player(video);
 
+    // Request filter
+    player
+      .getNetworkingEngine()
+      .registerRequestFilter(function (type, request) {
+        // Only add headers to SEGMENT requests:
+        if (type == shaka.net.NetworkingEngine.RequestType.SEGMENT) {
+          // This is the specific header name and value the server wants:
+          request.headers["Authorization"] = localStorage.getItem("token");
+        }
+      });
+
     //Setting up shaka player UI
     const ui = new shaka.ui.Overlay(player, videoContainer, video);
     ui.getControls();
