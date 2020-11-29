@@ -9,6 +9,11 @@
       style="width: 100%; height: 100%"
       poster="https://i.vimeocdn.com/video/708740915.jpg?mw=1400&mh=788"
     ></video>
+
+    <div v-if="isError" id="errorText" ref="errorText">
+      <p>This video file cannot be played.</p>
+      <p>Please try again later!</p>
+    </div>
   </div>
 </template>
 
@@ -21,6 +26,9 @@ export default {
   data() {
     return {
       isManifestLoaded: false,
+      player: null,
+      ui: null,
+      isError: false,
     };
   },
   methods: {
@@ -32,21 +40,29 @@ export default {
     onError(error) {
       // Log the error.
       console.error("Error code", error.code, "object", error);
+
+      if (error.data[1] === 503) {
+        console.log("cannot get segment");
+        this.$refs.videoComponent.poster = null;
+        this.$refs.videoComponent.style.backgroundColor = "black";
+        this.ui.setEnabled(false);
+        this.isError = true;
+      }
     },
   },
   mounted() {
-    //Link to MPEG-DASH video
-    var manifestUri = this.manifest;
+    // Link to MPEG-DASH video
+    const manifestUri = this.manifest;
 
-    //Getting reference to video and video container on DOM
+    // Getting reference to video and video container on DOM
     const video = this.$refs.videoComponent;
     const videoContainer = this.$refs.videoContainer;
 
-    //Initialize shaka player
-    var player = new shaka.Player(video);
+    // Initialize shaka player
+    this.player = new shaka.Player(video);
 
     // Request filter
-    player
+    this.player
       .getNetworkingEngine()
       .registerRequestFilter(function (type, request) {
         // Only add headers to SEGMENT requests:
@@ -56,12 +72,12 @@ export default {
         }
       });
 
-    //Setting up shaka player UI
-    const ui = new shaka.ui.Overlay(player, videoContainer, video);
-    ui.getControls();
+    // Setting up shaka player UI
+    this.ui = new shaka.ui.Overlay(this.player, videoContainer, video);
+    this.ui.getControls();
 
     // Listen for error events.
-    player.addEventListener("error", this.onErrorEvent);
+    this.player.addEventListener("error", this.onErrorEvent);
 
     document
       .querySelector(".shaka-small-play-button.material-icons-round")
@@ -69,7 +85,7 @@ export default {
         "click",
         () => {
           if (!this.isManifestLoaded) {
-            player
+            this.player
               .load(manifestUri)
               .then(() => {
                 this.isManifestLoaded = true;
@@ -86,7 +102,7 @@ export default {
       "click",
       () => {
         if (!this.isManifestLoaded) {
-          player
+          this.player
             .load(manifestUri)
             .then(() => {
               this.isManifestLoaded = true;
@@ -102,5 +118,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+#errorText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  background-color: #000;
+  padding: 20px 40px;
+}
 </style>

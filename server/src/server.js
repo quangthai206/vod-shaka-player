@@ -13,14 +13,21 @@ const port = process.env.PORT || 3300;
 
 app.use(cors());
 
+let count = 0;
+
 app.use((req, res, next) => {
   if (req.url.endsWith('.mp4')) {
     console.log(req.header('Authorization'));
     console.log(req.url);
-    res.status(503).json({
-      status: 'error',
-      message: 'Server is busy'
-    });
+    if (count === 20) {
+      res.status(503).json({
+        status: 'error',
+        message: 'Server is busy'
+      });
+    } else {
+      count++;
+      next()
+    }
   } else {
     next();
   }
