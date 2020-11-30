@@ -11,8 +11,7 @@
     ></video>
 
     <div v-if="isError" id="errorText" ref="errorText">
-      <p>This video file cannot be played.</p>
-      <p>Please try again later!</p>
+      <pre>{{ errorMessage }}</pre>
     </div>
   </div>
 </template>
@@ -29,6 +28,7 @@ export default {
       player: null,
       ui: null,
       isError: false,
+      errorMessage: "",
     };
   },
   methods: {
@@ -40,14 +40,13 @@ export default {
     onError(error) {
       // Log the error.
       console.error("Error code", error.code, "object", error);
-
-      if (error.data[1] === 503) {
-        console.log("cannot get segment");
-        this.$refs.videoComponent.poster = null;
-        this.$refs.videoComponent.style.backgroundColor = "black";
-        this.ui.setEnabled(false);
-        this.isError = true;
-      }
+      this.$refs.videoComponent.pause();
+      this.$refs.videoComponent.poster = null;
+      this.$refs.videoComponent.style.backgroundColor = "black";
+      this.ui.setEnabled(false);
+      const resObj = JSON.parse(error.data[2]);
+      this.errorMessage = resObj.message;
+      this.isError = true;
     },
   },
   mounted() {
@@ -127,5 +126,11 @@ export default {
   color: #fff;
   background-color: #000;
   padding: 20px 40px;
+}
+
+pre {
+  color: inherit;
+  margin: 0;
+  font-size: inherit;
 }
 </style>
