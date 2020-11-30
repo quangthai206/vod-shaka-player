@@ -14,7 +14,19 @@ const port = process.env.PORT || 3300;
 
 app.use(cors());
 
-const connections = [];
+let connections = [];
+
+setInterval(() => {
+  const currentTime = Date.now();
+
+  connections = connections.filter((connection) => {
+    const delta = Math.round((currentTime - connection.timestamp) / 1000);
+    return delta <= 30;
+  });
+
+  console.log(connections);
+
+}, 3000)
 
 app.use((req, res, next) => {
   if (req.url.endsWith('.mp4')) {
@@ -22,8 +34,9 @@ app.use((req, res, next) => {
     try {
       const user = jwt.verify(token, process.env.JWT_SECRET);
 
-      const userConnection = connections.find(ele => ele === user.id);
+      const userConnection = connections.find(ele => ele.id === user.id);
       if (userConnection) {
+        userConnection.timestamp = Date.now();
         next();
         return;
       }
@@ -34,8 +47,10 @@ app.use((req, res, next) => {
           message: 'Error: 503\nThis video file cannot be played\nPlease try again later'
         });
       } else {
-        connections.push(user.id);
-        console.log(connections);
+        connections.push({
+          id: user.id,
+          timestamp: Date.now()
+        });
         next();
       }
     }
