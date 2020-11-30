@@ -57,6 +57,12 @@ export default {
     const video = this.$refs.videoComponent;
     const videoContainer = this.$refs.videoContainer;
 
+    // Jump back to start when video is ended
+    video.addEventListener("ended", function () {
+      console.log("ended");
+      video.currentTime = 0;
+    });
+
     // Initialize shaka player
     this.player = new shaka.Player(video);
 
