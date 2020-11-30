@@ -141,6 +141,8 @@ const createLesson = async (req, res) => {
       fs.writeFileSync(resultLocation, req.file.buffer);
       console.log('write file completed');
 
+      utils.execShellCommand(`ffmpeg -i ${resultLocation} -ss 00:00:01.000 -vframes 1 ${path.join(location, fileName + '_poster.png')}`)
+
       const p1 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 256k -ar 48000 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 1500k -maxrate 1500k -bufsize 1000k -vf "scale=-1:720" ${path.join(location, fileName + '_720.mp4')}`);
       const p2 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 128k -ar 44100 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 800k -maxrate 800k -bufsize 500k -vf "scale=-1:540" ${path.join(location, fileName + '_540.mp4')}`);
       const p3 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 64k -ar 22050 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 400k -maxrate 400k -bufsize 400k -vf "scale=-1:360" ${path.join(location, fileName + '_360.mp4')}`);
@@ -166,7 +168,8 @@ const createLesson = async (req, res) => {
       const newVideo = new Video({
         name: fileName,
         author: req.user.id,
-        fileLink: `http://127.0.0.1:3300/${fileName}.mpd`
+        fileLink: `http://127.0.0.1:3300/${fileName}.mpd`,
+        poster: `http://127.0.0.1:3300/${fileName}_poster.png`
       });
 
       await newVideo.save();
@@ -275,7 +278,7 @@ const getCourseDetails = async (req, res) => {
 
 const getLessonDetails = async (req, res) => {
   try {
-    const lesson = await Lesson.findOne({ _id: req.params.id }).populate({ path: "chapter", select: { 'course': 1 }, populate: { path: "course", select: { 'name': 1 } } }).populate({ path: "video", select: { 'fileLink': 1 } });
+    const lesson = await Lesson.findOne({ _id: req.params.id }).populate({ path: "chapter", select: { 'course': 1 }, populate: { path: "course", select: { 'name': 1 } } }).populate({ path: "video", select: { 'fileLink': 1, 'poster': 1 } });
 
     if (!lesson) {
       return res.status(404).json({

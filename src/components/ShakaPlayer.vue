@@ -7,7 +7,7 @@
       ref="videoComponent"
       id="video"
       style="width: 100%; height: 100%"
-      poster="https://i.vimeocdn.com/video/708740915.jpg?mw=1400&mh=788"
+      :poster="video.poster"
     ></video>
 
     <div v-if="isError" id="errorText" ref="errorText">
@@ -21,7 +21,7 @@ import "shaka-player/dist/controls.css";
 const shaka = require("shaka-player/dist/shaka-player.ui.js");
 
 export default {
-  props: ["manifest"],
+  props: ["video"],
   data() {
     return {
       isManifestLoaded: false,
@@ -51,7 +51,7 @@ export default {
   },
   mounted() {
     // Link to MPEG-DASH video
-    const manifestUri = this.manifest;
+    const manifestUri = this.video.fileLink;
 
     // Getting reference to video and video container on DOM
     const video = this.$refs.videoComponent;
