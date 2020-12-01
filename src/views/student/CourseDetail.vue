@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading">
+  <div v-if="asyncDataStatus_ready">
     <CourseIntro
       :title="courseDetails.name"
       :subtitle="courseDetails.description"
@@ -16,8 +16,11 @@ import axios from "axios";
 import CourseIntro from "../../components/common/CourseIntro";
 import CourseContentLeft from "../../components/student/CourseDetail/CourseContentLeft";
 import CourseContentRight from "../../components/student/CourseDetail/CourseContentRight";
+import asyncDataStatus from "../../mixins/asyncDataStatus";
+
 export default {
   name: "CourseDetails",
+  mixins: [asyncDataStatus],
   components: {
     CourseContentRight,
     CourseContentLeft,
@@ -25,12 +28,10 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
       courseDetails: null,
     };
   },
   created() {
-    this.isLoading = true;
     const courseId = this.$route.params.id;
     axios
       .get(`http://localhost:3300/api/courses/${courseId}`)
@@ -41,7 +42,7 @@ export default {
         console.log(err);
       })
       .finally(() => {
-        this.isLoading = false;
+        this.asyncDataStatus_fetched();
       });
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="courses-body container-courses">
+  <div v-if="asyncDataStatus_ready" class="courses-body container-courses">
     <div class="courses-header">
       <div class="courses-title">
         <h1 v-if="role === 'student'">STUDENT'S COURSES</h1>
@@ -79,7 +79,10 @@
 </template>
 
 <script>
+import asyncDataStatus from "../../mixins/asyncDataStatus";
+
 export default {
+  mixins: [asyncDataStatus],
   data() {
     return {
       role: this.$store.state.auth.user.role,
@@ -92,7 +95,11 @@ export default {
   },
   created() {
     if (this.courses.length === 0) {
-      this.$store.dispatch("courses/getAllCourse");
+      this.$store.dispatch("courses/getAllCourse").then(() => {
+        this.asyncDataStatus_fetched();
+      });
+    } else {
+      this.asyncDataStatus_fetched();
     }
   },
   methods: {

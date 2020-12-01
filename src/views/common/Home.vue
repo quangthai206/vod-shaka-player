@@ -21,6 +21,9 @@ export default {
       return this.$store.getters["auth/isAuthenticated"];
     },
   },
+  created() {
+    this.$store.commit("loading/setShowPage", true);
+  },
 };
 </script>
 

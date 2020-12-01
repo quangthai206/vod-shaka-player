@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading">
+  <div v-if="asyncDataStatus_ready">
     <div class="watch-container container-courses">
       <h3>
         <router-link :to="'/courses/' + lesson.chapter.course._id"
@@ -186,17 +186,17 @@
 <script>
 import axios from "axios";
 import ShakaPlayer from "../../components/ShakaPlayer";
+import asyncDataStatus from "../../mixins/asyncDataStatus";
 
 export default {
+  mixins: [asyncDataStatus],
   components: { ShakaPlayer },
   data() {
     return {
-      isLoading: false,
       lesson: null,
     };
   },
   created() {
-    this.isLoading = true;
     const lessonId = this.$route.params.id;
     axios
       .get(`http://localhost:3300/api/lessons/${lessonId}`)
@@ -208,7 +208,7 @@ export default {
         console.log(err);
       })
       .finally(() => {
-        this.isLoading = false;
+        this.asyncDataStatus_fetched();
       });
   },
 };

@@ -6,8 +6,15 @@ import App from './App.vue'
 import router from './router'
 import store from './store';
 import axios from 'axios'
+import NProgress from 'nprogress'
 
 Vue.config.productionTip = false;
+
+// Configure NProgress
+NProgress.configure({
+  speed: 200,
+  showSpinner: false,
+});
 
 /**
  * Initialize Vue application

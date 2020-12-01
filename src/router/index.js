@@ -6,6 +6,7 @@ import CourseDetail from "../views/common/CourseDetail";
 import UploadVideo from "../views/UploadVideo";
 import WatchStudent from "../views/student/WatchStudent"
 import Home from "../views/common/Home"
+import NProgress from "nprogress";
 
 Vue.use(VueRouter);
 
@@ -55,6 +56,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  store.commit("loading/setShowPage", false);
+  NProgress.start();
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters["auth/isAuthenticated"]) {
       next();
