@@ -19,6 +19,10 @@ const VideoSchema = new Schema(
     poster: {
       type: String,
       required: true
+    },
+    colors: {
+      type: Object,
+      required: true
     }
   },
   {

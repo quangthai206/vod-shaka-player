@@ -5,7 +5,8 @@ const Video = require("../model/Video");
 const User = require("../model/User")
 const fs = require('fs');
 const path = require('path');
-const utils = require('../utils/Utils')
+const utils = require('../utils/Utils');
+const Swatch = require('../utils/swatch');
 
 const createCourse = async (req, res) => {
   const { name, code, description } = req.body;
@@ -138,10 +139,36 @@ const createLesson = async (req, res) => {
       const fileName = title.trim().toLowerCase().replace(/ /g, '-') + '_' + Date.now();
       const location = __dirname.replace('controller', 'public');
       const resultLocation = path.join(location, fileName + '.mp4');
+      const newVideo = new Video({
+        name: fileName,
+        author: req.user.id,
+        fileLink: `http://127.0.0.1:3300/${fileName}.mpd`,
+        poster: `http://127.0.0.1:3300/${fileName}_poster.png`
+      });
+
       fs.writeFileSync(resultLocation, req.file.buffer);
       console.log('write file completed');
 
-      utils.execShellCommand(`ffmpeg -i ${resultLocation} -ss 00:00:01.000 -vframes 1 ${path.join(location, fileName + '_poster.png')}`)
+      await utils.execShellCommand(`ffmpeg -i ${resultLocation} -ss 00:00:01.000 -vframes 1 ${path.join(location, fileName + '_poster.png')}`)
+      Swatch.load(path.join(location, fileName + '_poster.png'))
+        .then(pixels => Swatch.quantize(pixels))
+        .then(buckets => Swatch.orderByLuminance(buckets))
+        .then(swatch => {
+          const primary = Swatch.getMostVariantColor(swatch);
+          console.log(primary);
+          const colors = {
+            primary,
+            secondary: Swatch.darken(primary, 25),
+            tertiary: Swatch.darken(primary, 50),
+            quaternary: Swatch.darken(primary, 75),
+            primaryLight: Swatch.lighten(primary, 100)
+          };
+
+          newVideo.colors = colors;
+
+          console.log(JSON.stringify(colors, null, 2));
+
+        });
 
       const p1 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 256k -ar 48000 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 1500k -maxrate 1500k -bufsize 1000k -vf "scale=-1:720" ${path.join(location, fileName + '_720.mp4')}`);
       const p2 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 128k -ar 44100 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 800k -maxrate 800k -bufsize 500k -vf "scale=-1:540" ${path.join(location, fileName + '_540.mp4')}`);
@@ -164,13 +191,6 @@ const createLesson = async (req, res) => {
       --segment_duration 3`)
 
       console.log('generate manifest completed');
-
-      const newVideo = new Video({
-        name: fileName,
-        author: req.user.id,
-        fileLink: `http://127.0.0.1:3300/${fileName}.mpd`,
-        poster: `http://127.0.0.1:3300/${fileName}_poster.png`
-      });
 
       await newVideo.save();
 
@@ -278,7 +298,7 @@ const getCourseDetails = async (req, res) => {
 
 const getLessonDetails = async (req, res) => {
   try {
-    const lesson = await Lesson.findOne({ _id: req.params.id }).populate({ path: "chapter", select: { 'course': 1 }, populate: { path: "course", select: { 'name': 1 } } }).populate({ path: "video", select: { 'fileLink': 1, 'poster': 1 } });
+    const lesson = await Lesson.findOne({ _id: req.params.id }).populate({ path: "chapter", select: { 'course': 1 }, populate: { path: "course", select: { 'name': 1 } } }).populate({ path: "video", select: { 'fileLink': 1, 'poster': 1, 'colors': 1 } });
 
     if (!lesson) {
       return res.status(404).json({

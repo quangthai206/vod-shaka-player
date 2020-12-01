@@ -57,11 +57,18 @@
             <ul>
               <li
                 class="nav-item"
-                v-for="lesson in readyLessons(chapter.lessons)"
+                v-for="lesson in chapter.lessons"
                 :key="lesson._id"
               >
-                <router-link :to="'/lessons/' + lesson._id">
-                  <span class="fa fa-play"></span>
+                <router-link
+                  :event="lesson.video ? 'click' : ''"
+                  id="lesson-row"
+                  :to="'/lessons/' + lesson._id"
+                >
+                  <span
+                    class="fa fa-play"
+                    :class="{ 'disabled-play': !lesson.video }"
+                  ></span>
                   <p>
                     <b>{{ lesson.title }}</b>
                   </p>
@@ -81,13 +88,6 @@ export default {
   props: ["chapters"],
   created() {
     console.log(this.chapters);
-  },
-  methods: {
-    readyLessons(lessons) {
-      return lessons.filter((l) => {
-        return l.video;
-      });
-    },
   },
 };
 </script>
@@ -172,5 +172,10 @@ export default {
 .info-chap .content-chap li > a > p {
   font-size: 16px;
   color: #766b93;
+}
+
+#lesson-row .disabled-play {
+  color: #b3b3b3;
+  border: solid 3px #b3b3b3;
 }
 </style>
