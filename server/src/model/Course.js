@@ -16,6 +16,14 @@ const CourseSchema = new Schema(
       type: String,
       required: true,
     },
+    imageUrl1: {
+      type: String,
+      required: true
+    },
+    imageUrl2: {
+      type: String,
+      required: true
+    },
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

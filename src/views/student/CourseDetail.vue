@@ -3,6 +3,7 @@
     <CourseIntro
       :title="courseDetails.name"
       :subtitle="courseDetails.description"
+      :imageUrl="courseDetails.imageUrl2"
     />
     <div class="course-content container-courses">
       <CourseContentLeft :chapters="courseDetails.chapters" />

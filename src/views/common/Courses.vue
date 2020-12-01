@@ -55,11 +55,7 @@
         @click="goToCourse(course._id)"
       >
         <div class="course-item-img">
-          <div
-            style="
-              background-image: url('https://vueschool.io/media/4736c711002f927627a56f1e43a4841a/vueschool-vue-3-composition-api-not-transparent.jpg');
-            "
-          ></div>
+          <div :style="{ backgroundImage: `url(${course.imageUrl1})` }"></div>
         </div>
         <div class="course-item-desc">
           <h3 class="course-title">{{ course.name }}</h3>

@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import store from '../store/index';
 import Courses from "../views/common/Courses";
 import CourseDetail from "../views/common/CourseDetail";
-import UploadVideo from "../views/UploadVideo";
 import WatchStudent from "../views/student/WatchStudent"
 import Home from "../views/common/Home"
 import NProgress from "nprogress";
@@ -31,14 +30,6 @@ const routes = [
     // meta: {
     //   requiresAuth: true
     // },
-  },
-  {
-    path: '/upload',
-    name: 'UploadVideo',
-    component: UploadVideo,
-    // meta: {
-    //   requiresAuth: true
-    // }
   },
   {
     path: '/lessons/:id',

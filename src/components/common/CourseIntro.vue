@@ -19,14 +19,17 @@
         </a>
       </div>
     </div>
-    <div class="course-intro-img"></div>
+    <div
+      class="course-intro-img"
+      :style="{ backgroundImage: `url(${imageUrl})` }"
+    ></div>
   </div>
 </template>
 
 <script>
 export default {
   name: "CourseIntro",
-  props: ["title", "subtitle"],
+  props: ["title", "subtitle", "imageUrl"],
 };
 </script>
 
@@ -78,7 +81,6 @@ export default {
 
 .course-intro .course-intro-img {
   flex: 1;
-  background-image: url("https://vueschool.io/media/acb06e901542e9ba62e98f515ce8d266/vuejs-single-file-components.png");
   background-size: contain;
   background-position: right;
   background-repeat: no-repeat;

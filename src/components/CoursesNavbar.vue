@@ -5,7 +5,11 @@
     <nav class="navbar fixed-top courses-top-nav navbar-expand-lg">
       <div class="navbar-header">
         <router-link to="/" class="navbar-brand courses-logo">
-          <img src="../assets/method-draw-image_1.svg" alt="" width="150px" />
+          <img
+            src="http://localhost:3300/images/logo.svg"
+            alt=""
+            width="150px"
+          />
         </router-link>
       </div>
       <div class="navbar-body">

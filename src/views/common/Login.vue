@@ -2,7 +2,11 @@
   <div class="login-page">
     <div class="login-left">
       <a href="#">
-        <img src="../../assets/logoUet.png" alt="" width="100px" />
+        <img
+          src="http://localhost:3300/images/logo-uet.png"
+          alt=""
+          width="100px"
+        />
       </a>
 
       <div class="login-welcome">
@@ -109,7 +113,7 @@ export default {
 .login-left {
   width: 40%;
   padding: 39px 45.5px;
-  background-image: url("../../assets/bg-4.jpg");
+  background-image: url("http://localhost:3300/images/background-login.jpg");
   background-position: center;
   background-size: cover;
   color: #ffffff;

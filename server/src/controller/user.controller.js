@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
       user.role = role;
     }
 
-    if(courseId) {
+    if (courseId) {
       user.courses.unshift(courseId)
     }
 
@@ -55,7 +55,7 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         status: false,
-        message: "Tài khoản hoặc mật khẩu không chính xác",
+        message: "Invalid email or password",
       });
     }
 
@@ -64,7 +64,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({
         status: false,
-        message: "Tài khoản hoặc mật khẩu không chính xác",
+        message: "Invalid email or password",
       });
     }
 

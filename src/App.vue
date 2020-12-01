@@ -62,5 +62,9 @@ p {
 a {
   text-decoration: none !important;
 }
+
+#b-toaster-top-right {
+  top: 50px;
+}
 </style>
 
