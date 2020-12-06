@@ -112,7 +112,7 @@
       </b-form>
     </b-modal>
 
-    <b-modal id="add-lesson-modal" no-close-on-backdrop>
+    <b-modal id="add-lesson-modal" @hide="closeAddModal" no-close-on-backdrop>
       <template #modal-title>New Lesson</template>
       <template #modal-footer="{ cancel }">
         <button @click="cancel()" type="button" class="btn btn-secondary">
@@ -280,6 +280,11 @@ export default {
         }));
         console.log(this.listVideo);
       });
+    },
+
+    closeAddModal() {
+      console.log("close add modal");
+      this.chooseAvailableVideo = false;
     },
   },
 };

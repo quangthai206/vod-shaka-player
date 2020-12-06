@@ -23,6 +23,10 @@ const VideoSchema = new Schema(
     colors: {
       type: Object,
       required: true
+    },
+    duration: {
+      type: Number,
+      required: true
     }
   },
   {

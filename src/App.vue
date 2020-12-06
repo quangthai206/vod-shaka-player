@@ -4,12 +4,12 @@
       <CoursesNavbar />
     </div>
     <router-view v-show="showPage" :key="$route.path" />
-    <AppSpinner v-show="!showPage" />
+    <div id="spinner" v-show="!showPage"><AppSpinner /></div>
   </div>
 </template>
 
 <script>
-import CoursesNavbar from "./components/CoursesNavbar";
+import CoursesNavbar from "./components/common/CoursesNavbar";
 import AppSpinner from "./components/common/AppSpinner";
 import NProgress from "nprogress";
 
@@ -68,3 +68,8 @@ a {
 }
 </style>
 
+<style scoped>
+#spinner {
+  margin: 100px 0;
+}
+</style>

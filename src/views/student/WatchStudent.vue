@@ -29,154 +29,8 @@
               >
             </div>
           </div>
-          <div class="mt-6 list-lessons">
-            <div>
-              <div
-                class="w-full bg-white rounded-lg pb-6 shadow-lg"
-                id="chapter-widget"
-              >
-                <div
-                  class="rounded-t-lg px-4 md:px-8 py-4 text-sm"
-                  style="
-                    background: rgb(246, 245, 249) none repeat scroll 0% 0%;
-                  "
-                >
-                  <a href="#" class="hover:no-underline flex items-center"
-                    ><a
-                      href="/courses/nuxtjs-fundamentals"
-                      title="Course Overview of Nuxt.js Fundamentals"
-                      class="hover:no-underline"
-                      ><i class="fas fa-arrow-left text-green mr-1"></i>
-                      Nuxt.js Fundamentals
-                    </a></a
-                  >
-                </div>
-                <div class="px-4 md:px-8">
-                  <div class="mt-6 mb-4 flex justify-between items-center">
-                    <ul class="list-reset flex items-start">
-                      <li>
-                        <i
-                          class="fa fa-angle-left text-grey text-xl cursor-not-allowed"
-                        ></i>
-                      </li>
-                      <li
-                        class="flex items-center text-sm justify-center"
-                        style="min-width: 73px; font-size: 15px"
-                      >
-                        Chapter 1
-                      </li>
-                      <li>
-                        <a href="#" title="Next Chapter: Working with Nuxt.js"
-                          ><i class="fa fa-angle-right text-green text-xl"></i
-                        ></a>
-                      </li>
-                    </ul>
-                    <div>
-                      <div data-v-4fdc60af="">
-                        <a
-                          data-v-4fdc60af=""
-                          href="#"
-                          title="Follow Nuxt.js Fundamentals"
-                          class="text-xs p-0"
-                          ><i data-v-4fdc60af="" class="far fa-star"></i>
-                          Follow
-                        </a>
-                        <p
-                          data-v-4fdc60af=""
-                          class="text-sm text-grey"
-                          style="display: none"
-                        >
-                          You will receive a notification to your email when a
-                          new lesson is published.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mt-1 flex items-center justify-between">
-                    <h4 class="text-xl">Introduction to Nuxt.js</h4>
-                    <span class="hidden md:inline-block text-sm"
-                      >3 lessons • 7 min</span
-                    >
-                  </div>
-                  <div class="lessons mt-6">
-                    <div class="lesson leading-tight watching-lesson">
-                      <div class="flex">
-                        <div
-                          class="flex justify-center items-center"
-                          style="width: 25px"
-                        >
-                          <i class="fas fa-play text-green"></i>
-                        </div>
-                        <span
-                          ><a
-                            href="/lessons/what-is-nuxtjs"
-                            title="Go to Vue.js lesson: What is Nuxt.js?"
-                          >
-                            What is Nuxt.js?
-                          </a></span
-                        >
-                        <div class="flex items-center"><!----></div>
-                      </div>
-                      <span>3:45</span>
-                    </div>
-                    <div class="lesson leading-tight">
-                      <div class="flex">
-                        <div
-                          class="flex justify-center items-center"
-                          style="width: 25px"
-                        >
-                          <span class="text-xs text-center">2.</span>
-                        </div>
-                        <span
-                          ><a
-                            href="/lessons/create-nuxt-app"
-                            title="Go to Vue.js lesson: Create Nuxt App"
-                          >
-                            Create Nuxt App
-                          </a></span
-                        >
-                        <div class="flex items-center"><!----></div>
-                      </div>
-                      <span>1:38</span>
-                    </div>
-                    <div class="lesson leading-tight">
-                      <div class="flex">
-                        <div
-                          class="flex justify-center items-center"
-                          style="width: 25px"
-                        >
-                          <span class="text-xs text-center">3.</span>
-                        </div>
-                        <span
-                          ><a
-                            href="/lessons/guided-nuxtjs-project-tour"
-                            title="Go to Vue.js lesson: Guided Nuxt.js Project Tour"
-                          >
-                            Guided Nuxt.js Project Tour
-                          </a></span
-                        >
-                        <div class="flex items-center"><!----></div>
-                      </div>
-                      <span>2:02</span>
-                    </div>
-                  </div>
-                  <div class="mt-4 md:mt-8">
-                    <span class="font-thin text-sm leading-loose tracking-wide"
-                      >NEXT CHAPTER</span
-                    >
-                    <div class="flex flex-wrap md:flex-no-wrap justify-between">
-                      <a href="#" title="Up next Working with Nuxt.js"
-                        >Working with Nuxt.js</a
-                      >
-                      <span class="w-full md:m-0 md:w-auto text-sm">
-                        8 lessons • 19 min
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- List lessons -->
+          <Playlist :playlist="playlist" />
         </div>
       </div>
     </div>
@@ -185,23 +39,35 @@
 
 <script>
 import axios from "axios";
-import ShakaPlayer from "../../components/ShakaPlayer";
+import ShakaPlayer from "../../components/common/ShakaPlayer";
 import asyncDataStatus from "../../mixins/asyncDataStatus";
+import Playlist from "../../components/student/Playlist";
 
 export default {
   mixins: [asyncDataStatus],
-  components: { ShakaPlayer },
+  components: { ShakaPlayer, Playlist },
   data() {
     return {
       lesson: null,
+      playlist: null,
     };
   },
   created() {
     const lessonId = this.$route.params.id;
+
+    // Get lesson information
     axios
       .get(`http://localhost:3300/api/lessons/${lessonId}`)
       .then((res) => {
-        console.log(res.data.data);
+        // Get playlist information
+        axios
+          .get(
+            `http://localhost:3300/api/courses/${res.data.data.chapter.course._id}/playlist`
+          )
+          .then((res) => {
+            this.playlist = res.data;
+          });
+
         this.lesson = res.data.data;
       })
       .catch((err) => {

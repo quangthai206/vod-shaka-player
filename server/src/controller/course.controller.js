@@ -170,6 +170,9 @@ const createLesson = async (req, res) => {
 
         });
 
+      const duration = await utils.execShellCommand(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 ${resultLocation}`)
+      newVideo.duration = Math.round(duration);
+
       const p1 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 256k -ar 48000 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 1500k -maxrate 1500k -bufsize 1000k -vf "scale=-1:720" ${path.join(location, fileName + '_720.mp4')}`);
       const p2 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 128k -ar 44100 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 800k -maxrate 800k -bufsize 500k -vf "scale=-1:540" ${path.join(location, fileName + '_540.mp4')}`);
       const p3 = utils.execShellCommand(`ffmpeg -y -i ${resultLocation} -c:a aac -ac 2 -ab 64k -ar 22050 -c:v libx264 -x264opts 'keyint=24:min-keyint=24:no-scenecut' -b:v 400k -maxrate 400k -bufsize 400k -vf "scale=-1:360" ${path.join(location, fileName + '_360.mp4')}`);
@@ -321,6 +324,23 @@ const getLessonDetails = async (req, res) => {
   }
 }
 
+const getPlaylist = async (req, res) => {
+  try {
+    const courseDetails = await Course.findOne({ _id: req.params.id }).populate({ path: "chapters", populate: { path: "lessons", populate: { path: "video", select: { 'duration': 1 } } } });
+    res.json({
+      courseId: courseDetails._id,
+      courseTitle: courseDetails.name,
+      chapters: courseDetails.chapters
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: false,
+      message: err.message,
+    });
+  }
+}
+
 module.exports = {
   createCourse,
   getCourses,
@@ -329,5 +349,6 @@ module.exports = {
   createLesson,
   updateLesson,
   getCourseDetails,
-  getLessonDetails
+  getLessonDetails,
+  getPlaylist
 };
