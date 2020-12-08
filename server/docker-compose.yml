@@ -8,6 +8,7 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - mongo
+      - shaka-packager
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:
@@ -24,6 +25,15 @@ services:
     volumes:
       - ./data:/data/db
     networks:
+      - common
+      
+  shaka-packager:
+    container_name: shaka-packager
+    build: 
+      context: .
+      target: builder
+      dockerfile: ./Dockerfile
+    networks: 
       - common
 
 networks:

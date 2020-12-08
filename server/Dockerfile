@@ -1,4 +1,4 @@
-FROM node:12.18.4-alpine
+FROM node
 
 WORKDIR /app
 
@@ -6,6 +6,39 @@ COPY . .
 
 RUN npm install
 
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get install -y ffmpeg
+
 EXPOSE 3300
 
 CMD ["npm", "start"]
+
+FROM alpine:3.8 as builder
+
+# Install packages needed for Shaka Packager.
+RUN apk add --no-cache bash build-base curl findutils git ninja python \
+  bsd-compat-headers linux-headers libexecinfo-dev
+
+# Install depot_tools.
+RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+ENV PATH $PATH:/depot_tools
+
+# Alpine uses musl which does not have mallinfo defined in malloc.h. Define the
+# structure to workaround a Chromium base bug.
+RUN sed -i \
+  '/malloc_usable_size/a \\nstruct mallinfo {\n  int arena;\n  int hblkhd;\n  int uordblks;\n};' \
+  /usr/include/malloc.h
+
+ENV GYP_DEFINES='clang=0 use_experimental_allocator_shim=0 use_allocator=none musl=1'
+# Alpine does not support python3 yet, but depot_tools enabled python3
+# by default. Disable python3 explicitly for now.
+# See https://github.com/google/shaka-packager/issues/763 for details.
+ENV GCLIENT_PY3=0
+
+# Build shaka-packager
+WORKDIR shaka_packager
+RUN gclient config https://www.github.com/google/shaka-packager.git --name=src --unmanaged
+COPY . src
+RUN gclient sync
+RUN cd src && ninja -C out/Release
