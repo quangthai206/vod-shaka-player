@@ -1,11 +1,13 @@
-FROM node:12.18.4-alpine
+FROM google/shaka-packager
 
-WORKDIR /app
+RUN apk add --update nodejs npm ffmpeg
 
-COPY . .
+WORKDIR /usr/src/app
+
+COPY package*.json ./
 
 RUN npm install
 
-EXPOSE 3300
+COPY . .
 
 CMD ["npm", "start"]
