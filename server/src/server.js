@@ -8,7 +8,9 @@ const jwt = require("jsonwebtoken");
 const connectDb = require("./config/connectDb");
 const router = require("./routers/router");
 
-connectDb();
+connectDb().then(() => {
+  console.log('db connected');
+});
 
 const port = process.env.PORT || 3300;
 
