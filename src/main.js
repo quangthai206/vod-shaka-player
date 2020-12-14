@@ -33,7 +33,7 @@ const localToken = localStorage.getItem('token');
 // Otherwise, just init Vue app
 if (localToken) {
   axios.get(
-    "http://localhost:3300/api/token",
+    "http://apig9.toedu.me/api/token",
     {
       headers: {
         'Authorization': localToken

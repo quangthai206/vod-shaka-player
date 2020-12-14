@@ -194,7 +194,7 @@ export default {
         const courseId = this.$route.params.id;
 
         axios
-          .post("http://localhost:3300/api/chapters", { title, courseId })
+          .post("http://apig9.toedu.me/api/chapters", { title, courseId })
           .then((res) => {
             console.log(res.data.data);
             this.$emit("add-chapter", res.data.data);
@@ -243,7 +243,7 @@ export default {
 
         axios({
           method: "post",
-          url: "http://localhost:3300/api/lessons",
+          url: "http://apig9.toedu.me/api/lessons",
           data: formUpload,
           headers: { "Content-Type": "multipart/form-data" },
         })
@@ -272,7 +272,7 @@ export default {
     },
 
     getVideo() {
-      axios.get("http://localhost:3300/api/videos").then((res) => {
+      axios.get("http://apig9.toedu.me/api/videos").then((res) => {
         const videos = res.data;
         this.listVideo = videos.data.map((item) => ({
           value: item._id,

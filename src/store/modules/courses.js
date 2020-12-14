@@ -15,7 +15,7 @@ const mutations = {
 const actions = {
   getAllCourse({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get("http://localhost:3300/api/courses")
+      axios.get("http://apig9.toedu.me/api/courses")
         .then((res) => {
           commit('setCourses', res.data.data)
           resolve();

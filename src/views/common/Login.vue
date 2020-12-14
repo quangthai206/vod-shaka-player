@@ -3,7 +3,7 @@
     <div class="login-left">
       <a href="#">
         <img
-          src="http://localhost:3300/images/logo-uet.png"
+          src="http://apig9.toedu.me/images/logo-uet.png"
           alt=""
           width="100px"
         />
@@ -113,7 +113,7 @@ export default {
 .login-left {
   width: 40%;
   padding: 39px 45.5px;
-  background-image: url("http://localhost:3300/images/background-login.jpg");
+  background-image: url("http://apig9.toedu.me/images/background-login.jpg");
   background-position: center;
   background-size: cover;
   color: #ffffff;

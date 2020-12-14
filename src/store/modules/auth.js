@@ -17,7 +17,7 @@ const mutations = {
 const actions = {
     login({ commit }, { email, password }) {
         return new Promise((resolve, reject) => {
-            axios.post('http://localhost:3300/api/login', { email, password })
+            axios.post('http://apig9.toedu.me/api/login', { email, password })
                 .then(res => {
                     const responseData = res.data;
                     axios.defaults.headers.common['Authorization'] = responseData.data.token;
