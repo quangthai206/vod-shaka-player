@@ -79,8 +79,12 @@
             <h4 class="text-xl">{{ currentChapter.title }}</h4>
             <span class="md:inline-block text-sm"
               >{{ playlist.chapters[currentChapterIndex].lessons.length }}
-              lessons •
-              {{ totalMinutePerChapter(currentChapterIndex) }} min</span
+              {{
+                playlist.chapters[currentChapterIndex].lessons.length > 1
+                  ? "lessons"
+                  : "lesson"
+              }}
+              • {{ totalMinutePerChapter(currentChapterIndex) }} min</span
             >
           </div>
           <div class="lessons mt-6">
@@ -131,8 +135,12 @@
               }}</a>
               <span class="w-full md:m-0 md:w-auto text-sm">
                 {{ playlist.chapters[currentChapterIndex + 1].lessons.length }}
-                lessons •
-                {{ totalMinutePerChapter(currentChapterIndex + 1) }} min
+                {{
+                  playlist.chapters[currentChapterIndex + 1].lessons.length > 1
+                    ? "lessons"
+                    : "lesson"
+                }}
+                • {{ totalMinutePerChapter(currentChapterIndex + 1) }} min
               </span>
             </div>
           </div>
@@ -179,7 +187,7 @@ export default {
       console.log(this.playlist.chapters[chapterIndex].lessons);
       const totalSecond = this.playlist.chapters[chapterIndex].lessons.reduce(
         (total, currentValue) => {
-          return total + currentValue.video.duration;
+          return total + (currentValue.video ? currentValue.video.duration : 0);
         },
         0
       );
