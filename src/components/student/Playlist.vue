@@ -102,54 +102,19 @@
                   >
                 </div>
                 <span
-                  ><router-link :to="`/lessons/${lesson._id}`">
+                  ><router-link
+                    :to="`/lessons/${lesson._id}`"
+                    :event="lesson.video ? 'click' : ''"
+                  >
                     {{ lesson.title }}
                   </router-link></span
                 >
                 <div class="flex items-center"></div>
               </div>
-              <span>{{ fmtMSS(lesson.video.duration) }}</span>
+              <span v-if="lesson.video">{{
+                fmtMSS(lesson.video.duration)
+              }}</span>
             </div>
-            <!-- <div class="lesson leading-tight">
-              <div class="flex">
-                <div
-                  class="flex justify-center items-center"
-                  style="width: 25px"
-                >
-                  <span class="text-xs text-center">2.</span>
-                </div>
-                <span
-                  ><a
-                    href="/lessons/create-nuxt-app"
-                    title="Go to Vue.js lesson: Create Nuxt App"
-                  >
-                    Create Nuxt App
-                  </a></span
-                >
-                <div class="flex items-center"></div>
-              </div>
-              <span>1:38</span>
-            </div> -->
-            <!-- <div class="lesson leading-tight">
-              <div class="flex">
-                <div
-                  class="flex justify-center items-center"
-                  style="width: 25px"
-                >
-                  <span class="text-xs text-center">3.</span>
-                </div>
-                <span
-                  ><a
-                    href="/lessons/guided-nuxtjs-project-tour"
-                    title="Go to Vue.js lesson: Guided Nuxt.js Project Tour"
-                  >
-                    Guided Nuxt.js Project Tour
-                  </a></span
-                >
-                <div class="flex items-center"></div>
-              </div>
-              <span>2:02</span>
-            </div> -->
           </div>
           <div
             v-if="currentChapterIndex < playlist.chapters.length - 1"
