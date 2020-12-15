@@ -142,8 +142,8 @@ const createLesson = async (req, res) => {
       const newVideo = new Video({
         name: fileName,
         author: req.user.id,
-        fileLink: `http://apig9.toedu.me/${fileName}.mpd`,
-        poster: `http://apig9.toedu.me/${fileName}_poster.png`
+        fileLink: `http://localhost:3300/${fileName}.mpd`,
+        poster: `http://localhost:3300/${fileName}_poster.png`
       });
 
       fs.writeFileSync(resultLocation, req.file.buffer);

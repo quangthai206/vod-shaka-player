@@ -57,12 +57,12 @@ export default {
 
     // Get lesson information
     axios
-      .get(`http://apig9.toedu.me/api/lessons/${lessonId}`)
+      .get(`http://localhost:3300/api/lessons/${lessonId}`)
       .then((res) => {
         // Get playlist information
         axios
           .get(
-            `http://apig9.toedu.me/api/courses/${res.data.data.chapter.course._id}/playlist`
+            `http://localhost:3300/api/courses/${res.data.data.chapter.course._id}/playlist`
           )
           .then((res) => {
             this.playlist = res.data;

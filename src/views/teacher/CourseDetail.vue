@@ -50,7 +50,7 @@ export default {
   created() {
     const courseId = this.$route.params.id;
     axios
-      .get(`http://apig9.toedu.me/api/courses/${courseId}`)
+      .get(`http://localhost:3300/api/courses/${courseId}`)
       .then((res) => {
         this.courseDetails = res.data.data;
       })

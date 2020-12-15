@@ -6,7 +6,7 @@
       <div class="navbar-header">
         <router-link to="/" class="navbar-brand courses-logo">
           <img
-            src="http://apig9.toedu.me/images/logo.svg"
+            src="http://localhost:3300/images/logo.svg"
             alt=""
             width="150px"
           />
