@@ -77,8 +77,10 @@
           </div>
           <div class="mt-1 flex items-center justify-between">
             <h4 class="text-xl">{{ currentChapter.title }}</h4>
-            <span class="hidden md:inline-block text-sm"
-              >3 lessons • 7 min</span
+            <span class="md:inline-block text-sm"
+              >{{ playlist.chapters[currentChapterIndex].lessons.length }}
+              lessons •
+              {{ totalMinutePerChapter(currentChapterIndex) }} min</span
             >
           </div>
           <div class="lessons mt-6">
