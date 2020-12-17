@@ -32,37 +32,25 @@ setInterval(() => {
 
 app.use((req, res, next) => {
   if (req.url.endsWith('.mp4')) {
-    const token = req.header('Authorization');
-    try {
-      const user = jwt.verify(token, process.env.JWT_SECRET);
-
-      const userConnection = connections.find(ele => ele.id === user.id);
-      if (userConnection) {
-        userConnection.timestamp = Date.now();
-        next();
-        return;
-      }
-
-      if (connections.length === 2) {
-        res.status(503).json({
-          status: 'error',
-          message: 'Error: 503\nThis video file cannot be played\nPlease try again later'
-        });
-      } else {
-        connections.push({
-          id: user.id,
-          timestamp: Date.now()
-        });
-        next();
-      }
+    const userConnection = connections.find(ele => ele.id === req.get('uid'));
+    if (userConnection) {
+      userConnection.timestamp = Date.now();
+      next();
+      return;
     }
-    catch (err) {
-      res.status(401).json({
+
+    if (connections.length === 2) {
+      res.status(503).json({
         status: 'error',
-        message: 'Error: 401\nNot Authorized.'
-      })
+        message: 'Error: 503\nThis video file cannot be played\nPlease try again later'
+      });
+    } else {
+      connections.push({
+        id: req.get('uid'),
+        timestamp: Date.now()
+      });
+      next();
     }
-
   } else {
     next();
   }
