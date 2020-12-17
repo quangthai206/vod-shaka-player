@@ -245,7 +245,10 @@ export default {
           method: "post",
           url: "http://apig9.toedu.me/api/lessons",
           data: formUpload,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            uid: this.$store.state.auth.user._id,
+          },
         })
           .then((res) => {
             console.log(res.data.data);

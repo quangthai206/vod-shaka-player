@@ -32,7 +32,7 @@ const actions = {
         })
     },
     logout({ commit }) {
-        localStorage.removeItem('token');
+        window.localStorage.clear();
         commit('setUser', null);
         commit('courses/setCourses', [], { root: true });
     }

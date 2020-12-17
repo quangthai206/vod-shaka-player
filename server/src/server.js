@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
 
 const connectDb = require("./config/connectDb");
 const router = require("./routers/router");

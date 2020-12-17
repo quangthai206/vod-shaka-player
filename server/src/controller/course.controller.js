@@ -141,7 +141,7 @@ const createLesson = async (req, res) => {
       const resultLocation = path.join(location, fileName + '.mp4');
       const newVideo = new Video({
         name: fileName,
-        author: req.user.id,
+        author: req.get('uid'),
         fileLink: `http://apig9.toedu.me/${fileName}.mpd`,
         poster: `http://apig9.toedu.me/${fileName}_poster.png`
       });
