@@ -15,7 +15,7 @@ router.get("/courses/:id", courseController.getCourseDetails);
 router.post("/chapters", courseController.createChapter);
 router.patch("/chapters", courseController.updateChapterTitle)
 router.get("/lessons/:id", courseController.getLessonDetails)
-router.post("/lessons", auth, upload.single('video'), courseController.createLesson)
+router.post("/lessons", upload.single('video'), courseController.createLesson)
 router.patch("/lessons", courseController.updateLesson)
 router.get("/courses/:id/playlist", courseController.getPlaylist)
 
