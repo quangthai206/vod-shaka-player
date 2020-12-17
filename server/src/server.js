@@ -78,7 +78,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api", router);
 
-app.get("/", (_req, res) => {
+app.post('/intergrates/register', (req, res) => {
+  console.log(req.body);
+  res.json({
+    status: 'success'
+  })
+})
+
+app.get("/", (req, res) => {
   return res.status(200).json({
     message: "hello",
   });
