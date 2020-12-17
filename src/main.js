@@ -81,7 +81,7 @@ if (redirectFromMainApp()) {
         window.location.href = "http://toedu.me/";
       } else if (result.data.code == 200) {
         window.localStorage.setItem("x-token", result.data.data.token);
-        window.location.href = "g9.toedu.me";
+        window.location.href = "http://g9.toedu.me/";
 
       } else {
         window.location.href = "http://toedu.me/";
