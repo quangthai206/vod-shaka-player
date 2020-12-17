@@ -24,5 +24,6 @@ router.get("/videos", auth, videoController.getVideos)
 router.post("/users", userController.createUser);
 router.post("/login", userController.login);
 router.get("/token", auth, userController.checkToken);
+router.post("/getInfo", userController.getInfo);
 
 module.exports = router;

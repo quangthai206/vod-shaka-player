@@ -112,8 +112,21 @@ const checkToken = (req, res) => {
     }
   });
 };
+
+const getInfo = async (req, res) => {
+  console.log(req.body.email);
+
+  const user = await User.findOne({ email: req.body.email });
+
+  res.json({
+    message: 'success',
+    data: user
+  })
+}
+
 module.exports = {
   createUser,
   login,
   checkToken,
+  getInfo
 };
