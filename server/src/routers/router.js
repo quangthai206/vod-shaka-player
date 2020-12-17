@@ -10,7 +10,7 @@ router.post("/user", userController.createUser);
 router.post("/login", userController.login);
 
 router.post("/courses", courseController.createCourse);
-router.get("/courses", auth, courseController.getCourses);
+router.get("/courses", courseController.getCourses);
 router.get("/courses/:id", courseController.getCourseDetails);
 router.post("/chapters", courseController.createChapter);
 router.patch("/chapters", courseController.updateChapterTitle)

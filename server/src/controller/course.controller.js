@@ -252,7 +252,7 @@ const updateLesson = async (req, res) => {
 
 const getCourses = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.user.id }).populate({ path: 'courses', populate: { path: 'teacher', select: 'name' } })
+    const user = await User.findOne({ _id: req.get('uid') }).populate({ path: 'courses', populate: { path: 'teacher', select: 'name' } })
     if (!user) {
       return res.status(404).json({
         status: false,

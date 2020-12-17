@@ -27,40 +27,40 @@ function init() {
   }).$mount('#app')
 }
 
-const localToken = localStorage.getItem('token');
+// const localToken = localStorage.getItem('token');
 
 // If token exists in localStorage, validate token with API
 // Otherwise, just init Vue app
-if (localToken) {
-  axios.get(
-    "http://apig9.toedu.me/api/token",
-    {
-      headers: {
-        'Authorization': localToken
-      }
-    })
-    .then((res) => {
-      axios.defaults.headers.common['Authorization'] = localToken;
-      store.commit('auth/setUser', res.data.user);
-    })
-    .catch((e) => {
-      console.log(e);
-      localStorage.removeItem('token');
-    })
-    .finally(() => {
-      init();
-    })
-} else {
-  init();
-}
+// if (localToken) {
+//   axios.get(
+//     "http://apig9.toedu.me/api/token",
+//     {
+//       headers: {
+//         'Authorization': localToken
+//       }
+//     })
+//     .then((res) => {
+//       axios.defaults.headers.common['Authorization'] = localToken;
+//       store.commit('auth/setUser', res.data.user);
+//     })
+//     .catch((e) => {
+//       console.log(e);
+//       localStorage.removeItem('token');
+//     })
+//     .finally(() => {
+//       init();
+//     })
+// } else {
+//   init();
+// }
 
 function redirectFromMainApp() {
   var url = window.location;
-  this.sid = new URLSearchParams(url.search).get("sid");
+  window.sid = new URLSearchParams(url.search).get("sid");
   if (
     url.pathname === "/redirect" &&
-    this.sid !== null &&
-    this.sid !== ""
+    window.sid !== null &&
+    window.sid !== ""
   ) {
     return true;
   }
@@ -74,13 +74,15 @@ if (redirectFromMainApp()) {
   // Get token based on sid
   axios
     .get(
-      `http://api.toedu.me/api/Intergrates/token?sid=${this.sid}`
+      `http://api.toedu.me/api/Intergrates/token?sid=${window.sid}`
     )
     .then((result) => {
       if (result.data.code == 401) {
         window.location.href = "http://toedu.me/";
       } else if (result.data.code == 200) {
         window.localStorage.setItem("x-token", result.data.data.token);
+        window.location.href = "http://localhost:8080/";
+
       } else {
         window.location.href = "http://toedu.me/";
       }
@@ -97,7 +99,7 @@ if (redirectFromMainApp()) {
       method: "get",
       url: "http://api.toedu.me/api/Intergrates/users/me",
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: token,
         "Content-Type": "application/json",
       },
     };
@@ -107,6 +109,9 @@ if (redirectFromMainApp()) {
           axios.post('http://apig9.toedu.me/api/getInfo', { email: result.data.data.email })
             .then((res) => {
               console.log(res.data);
+              axios.defaults.headers.common['Authorization'] = token;
+              store.commit('auth/setUser', res.data.data);
+              init();
             })
         } else {
           window.location.href = "http://toedu.me/";
