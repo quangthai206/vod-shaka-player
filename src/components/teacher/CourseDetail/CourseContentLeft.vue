@@ -272,14 +272,20 @@ export default {
     },
 
     getVideo() {
-      axios.get("http://apig9.toedu.me/api/videos").then((res) => {
-        const videos = res.data;
-        this.listVideo = videos.data.map((item) => ({
-          value: item._id,
-          text: item.name,
-        }));
-        console.log(this.listVideo);
-      });
+      axios
+        .get("http://apig9.toedu.me/api/videos", {
+          headers: {
+            uid: this.$store.state.auth.user._id,
+          },
+        })
+        .then((res) => {
+          const videos = res.data;
+          this.listVideo = videos.data.map((item) => ({
+            value: item._id,
+            text: item.name,
+          }));
+          console.log(this.listVideo);
+        });
     },
 
     closeAddModal() {

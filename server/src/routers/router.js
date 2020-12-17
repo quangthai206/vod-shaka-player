@@ -19,7 +19,7 @@ router.post("/lessons", auth, upload.single('video'), courseController.createLes
 router.patch("/lessons", courseController.updateLesson)
 router.get("/courses/:id/playlist", courseController.getPlaylist)
 
-router.get("/videos", auth, videoController.getVideos)
+router.get("/videos", videoController.getVideos)
 
 router.post("/users", userController.createUser);
 router.post("/login", userController.login);
