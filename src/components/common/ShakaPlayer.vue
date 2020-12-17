@@ -139,15 +139,13 @@ export default {
     this.player = new shaka.Player(video);
 
     // Request filter
-    this.player
-      .getNetworkingEngine()
-      .registerRequestFilter(function (type, request) {
-        // Only add headers to SEGMENT requests:
-        if (type == shaka.net.NetworkingEngine.RequestType.SEGMENT) {
-          // This is the specific header name and value the server wants:
-          request.headers["Authorization"] = localStorage.getItem("token");
-        }
-      });
+    this.player.getNetworkingEngine().registerRequestFilter((type, request) => {
+      // Only add headers to SEGMENT requests:
+      if (type == shaka.net.NetworkingEngine.RequestType.SEGMENT) {
+        // This is the specific header name and value the server wants:
+        request.headers["uid"] = this.$store.state.auth.user._id;
+      }
+    });
 
     // Setting up shaka player UI
     this.ui = new shaka.ui.Overlay(this.player, videoContainer, video);
