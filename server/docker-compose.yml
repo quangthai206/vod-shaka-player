@@ -4,5 +4,7 @@ services:
     build: .
     ports: 
       - "3300:3300"
+    depends_on:
+      - mongo
   mongo:
-    image: "mongo"
+    build: ./database

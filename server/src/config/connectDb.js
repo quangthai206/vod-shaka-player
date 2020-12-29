@@ -10,6 +10,9 @@ let connectDb = () => {
   return mongoose.connect(URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    reconnectTries: Number.MAX_VALUE,
+    reconnectInterval: 500,
+    connectTimeoutMS: 10000,
   });
 };
 
