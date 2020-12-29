@@ -1,6 +1,6 @@
 version: "3.7"
 services: 
-  node:
+  backend:
     build: .
     ports: 
       - "3300:3300"
@@ -8,3 +8,9 @@ services:
       - mongo
   mongo:
     build: ./database
+  frontend:
+    build: ../
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
