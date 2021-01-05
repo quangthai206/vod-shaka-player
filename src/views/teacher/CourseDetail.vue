@@ -38,7 +38,6 @@ export default {
       this.courseDetails.chapters.push(newChapter);
     },
     addLessonHandler(newLesson) {
-      console.log("from parent handler");
       console.log(newLesson);
       this.courseDetails.chapters.forEach((chapter) => {
         if (chapter._id === newLesson.chapter) {
